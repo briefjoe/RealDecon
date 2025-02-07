@@ -1018,7 +1018,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldManager: {fileID: 2052329228}
   player: {fileID: 718729196}
-  worldContSpeed: 4
+  worldContSpeed: 0.5
   playerDeconSpeed: 8
 --- !u!114 &2052329228
 MonoBehaviour:

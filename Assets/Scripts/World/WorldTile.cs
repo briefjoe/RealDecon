@@ -9,8 +9,8 @@ public class WorldTile
     int y;
     bool purified;
 
-    float contStren; //strength of contamination for this tile
-    float contLevel; //level of contamination for this tile
+    float contStren; //strength of contamination for this tile. set by world
+    float contLevel; //level of contamination for this tile. set by flower
     bool converting; //if the tile is being contaminated/decontaminated
 
     bool hasObject;
@@ -71,28 +71,49 @@ public class WorldTile
 
     public void AddFlower(Flower f)
     {
-        //put a flower on this tile
 
-        activeFlowers.Add(f);
-        //PlaceObject(f);
-
+        //put flower into active flowers list
         converting = false;
 
-        //check for main flower
+        //activeFlowers.Add(f);
+
+
+        /*//check for main flower
+        if(mainFlower = null)
+        {
+            mainFlower = f;
+        }
+        else
+        {
+            //if(mainFlower.contstren < f.constren)
+        }*/
     }
 
     public void RemoveFlower(Flower f)
     {
-        activeFlowers.Remove(f);
-
-        //DestroyObject();
-
+        //reomve flwer from active flowers list
         converting = false;
 
-        if (mainFlower.Equals(f))
+        //activeFlowers.Remove(f);
+
+
+        /*if (mainFlower.Equals(f))
         {
-            //change the main flwoer
-        }
+            if (activeFlowers.Count > 0)
+            {
+                mainFlower = activeFlowers[0];
+
+
+                foreach (Flower tmp in activeFlowers)
+                {
+
+                }
+            }
+            else
+            {
+                mainFlower = null;
+            }
+        }*/
     }
 
     public List<Flower> GetActiveFlowers()

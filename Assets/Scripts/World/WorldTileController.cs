@@ -9,7 +9,7 @@ public class WorldTileController : MonoBehaviour
     [SerializeField] PlayerController player;
 
     //move this to somewhere else once I do different regions
-    [SerializeField] float worldContSpeed = 4.0f;
+    [SerializeField] float worldContSpeed = 0.1f;
     [SerializeField] float playerDeconSpeed = 8.0f;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -44,7 +44,7 @@ public class WorldTileController : MonoBehaviour
         //start decontaminate coroutine on the tile at the position
 
         //check if tile is already decontaminated stronger than the flower will decontaminate it
-        if(!tile.GetConverting() && tile.GetContLevel() > deconLevel)
+        if (!tile.GetConverting() && tile.GetContLevel() > deconLevel)
         {
            //set all the appropriate flags for the current tile
             tile.BeginDecon();
@@ -100,7 +100,7 @@ public class WorldTileController : MonoBehaviour
             //update color based on conversion progress
             worldManager.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), UnityEngine.Tilemaps.TileFlags.None);
 
-            worldManager.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(worldManager.GetConColor(), worldManager.GetDeconColor(), tile.GetContLevel()));
+            worldManager.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(worldManager.GetDeconColor(), worldManager.GetConColor(), tile.GetContLevel()));
 
             yield return null;
         }

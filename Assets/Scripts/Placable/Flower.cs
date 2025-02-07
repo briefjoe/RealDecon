@@ -12,8 +12,6 @@ public class Flower : PlacableObject
     {
         base.Place(worldManager, xPos, yPos);
 
-        worldManager.GetWorldTiles()[x][y].AddFlower(this); //REMOVE THIS AND PUT IT IN DECONTAMINATE COROUTINE
-
         clearSize = flowerShape.texture.height;
 
         StartCoroutine(Decontaminate());
@@ -33,6 +31,11 @@ public class Flower : PlacableObject
             for (int j = -clearSize / 2; j <= clearSize / 2; j++) {
                 if (flowerShape.texture.GetPixel(i + clearSize/2, j + clearSize/2).a != 0)
                 {
+                    //add flower to tile's active flowers
+                    world.GetWorldTiles()[x + i][x + j].AddFlower(this);
+
+                    Debug.Log("pos " + i + " " + j);
+
                     //start decontaminating tiles
                     world.GetTileController().StartCoroutine(world.GetTileController().Decontaminate(world.GetWorldTiles()[x + i][y + j], this, flowerShape.texture.GetPixel(i + clearSize / 2, j + clearSize / 2).r));
                 }
@@ -57,6 +60,9 @@ public class Flower : PlacableObject
             {
                 if (flowerShape.texture.GetPixel(i + clearSize / 2, j + clearSize / 2).a != 0)
                 {
+                    //remove flower from tile's active flowers
+                    world.GetWorldTiles()[x + i][x + j].RemoveFlower(this);
+
                     //start decontaminating tiles
                     world.GetTileController().StartCoroutine(world.GetTileController().Contaminate(world.GetWorldTiles()[x + i][y + j]));
                 }
