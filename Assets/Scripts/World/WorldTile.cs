@@ -11,7 +11,9 @@ public class WorldTile
 
     float contStren; //strength of contamination for this tile. set by world
     float contLevel; //level of contamination for this tile. set by flower
-    bool converting; //if the tile is being contaminated/decontaminated
+    float targetCont = 1f; //the target level for contamination on this tile
+    bool contaminating; //if the tile is being contaminated
+    bool decontaminating; //if the tile is being decontaminted
 
     bool hasObject;
     PlacableObject placedObject;
@@ -31,6 +33,7 @@ public class WorldTile
         world = worldManager;
         contStren = contaminationStrength;
         contLevel = contStren;
+        targetCont = contStren;
 
         activeFlowers = new List<Flower>();
     }
@@ -73,10 +76,7 @@ public class WorldTile
     {
 
         //put flower into active flowers list
-        converting = false;
-
-        //activeFlowers.Add(f);
-
+        activeFlowers.Add(f);
 
         /*//check for main flower
         if(mainFlower = null)
@@ -86,16 +86,14 @@ public class WorldTile
         else
         {
             //if(mainFlower.contstren < f.constren)
+            //change the tile's target contamination level
         }*/
     }
 
     public void RemoveFlower(Flower f)
     {
         //reomve flwer from active flowers list
-        converting = false;
-
-        //activeFlowers.Remove(f);
-
+        activeFlowers.Remove(f);
 
         /*if (mainFlower.Equals(f))
         {
@@ -141,30 +139,35 @@ public class WorldTile
         contLevel += amt;
     }
 
-    public bool GetConverting()
+    public bool GetContaminating()
     {
-        return converting;
+        return contaminating;
+    }
+
+    public bool GetDecontaminating()
+    {
+        return decontaminating;
     }
 
     public void BeginDecon()
     {
-        converting = true;
+        decontaminating = true;
         purified = true;
     }
 
     public void EndDecon()
     {
-        converting = false;
+        decontaminating = false;
     }
 
     public void BeginCon()
     {
-        converting = true;
+        contaminating = true;
         purified = false;
     }
     
     public void EndCon()
     {
-        converting = false;
+        contaminating = false;
     }
 }

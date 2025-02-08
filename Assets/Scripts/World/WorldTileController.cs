@@ -1,4 +1,5 @@
 using System.Collections;
+using TMPro;
 using UnityEditor.PackageManager;
 using UnityEngine;
 
@@ -31,7 +32,10 @@ public class WorldTileController : MonoBehaviour
         //contaminate/decontaminate player
         if (t.GetPurified())
         {
-            player.ContaminatePlayer(-1 * playerDeconSpeed * Time.deltaTime);
+            if (!t.GetDecontaminating())
+            {
+                player.ContaminatePlayer(-1 * playerDeconSpeed * Time.deltaTime);
+            }
         }
         else
         {
@@ -46,21 +50,16 @@ public class WorldTileController : MonoBehaviour
         //check if tile is already decontaminated stronger than the flower will decontaminate it
         if (!tile.GetConverting() && tile.GetContLevel() > deconLevel)
         {
-           //set all the appropriate flags for the current tile
             tile.BeginDecon();
-
-            //Debug.Log("Begin Contaminating");
+           //set all the appropriate flags for the current tile
 
             //Decontaminate
             while (tile.GetConverting() && tile.GetContLevel() > deconLevel)
             {
                 tile.ChangeContLevel(-f.GetConvSpeed() * Time.deltaTime);
 
-                //Debug.Log(tile.GetContLevel());
-
                 //update color based on conversion progress
                 worldManager.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), UnityEngine.Tilemaps.TileFlags.None);
-
                 worldManager.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(worldManager.GetDeconColor(), worldManager.GetConColor(), tile.GetContLevel()));
 
                 yield return null;
@@ -69,8 +68,6 @@ public class WorldTileController : MonoBehaviour
             tile.SetContLevel(deconLevel);
 
             tile.EndDecon();
-
-            //Debug.Log("Done Decontaminating");
         }
 
         yield return null;
@@ -89,25 +86,27 @@ public class WorldTileController : MonoBehaviour
 
         }
 
-        //THIS IS FOR WHEN THERE IS NO ACTIVE FLOWER
-
-        tile.BeginCon();
-
-        while (tile.GetConverting() && tile.GetContLevel() < conLevel)
+        if (tile.GetActiveFlowers().Count == 0)
         {
-            tile.ChangeContLevel(worldContSpeed * Time.deltaTime);
+            //when there are no active flowers on the tile
 
-            //update color based on conversion progress
-            worldManager.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), UnityEngine.Tilemaps.TileFlags.None);
+            tile.BeginCon();
 
-            worldManager.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(worldManager.GetDeconColor(), worldManager.GetConColor(), tile.GetContLevel()));
+            while (tile.GetConverting() && tile.GetContLevel() < conLevel)
+            {
+                tile.ChangeContLevel(worldContSpeed * Time.deltaTime);
 
-            yield return null;
+                //update color based on conversion progress
+                worldManager.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), UnityEngine.Tilemaps.TileFlags.None);
+                worldManager.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(worldManager.GetDeconColor(), worldManager.GetConColor(), tile.GetContLevel()));
+
+                yield return null;
+            }
+
+            tile.SetContLevel(conLevel);
+
+            tile.EndCon();
         }
-
-        tile.SetContLevel(conLevel);
-
-        tile.EndCon();
 
 
         yield return null; 

@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Tilemaps;
 
 public class Flower : PlacableObject
 {
@@ -26,15 +27,14 @@ public class Flower : PlacableObject
     {
 
         //go through the tiles in the range and start edecontaminating them in the WorldTileController
-        for(int i = -clearSize/2; i <= clearSize/2; i++)
+        for(int i = -Mathf.FloorToInt(clearSize / 2.0f); i <= Mathf.FloorToInt(clearSize / 2.0f); i++)
         {
-            for (int j = -clearSize / 2; j <= clearSize / 2; j++) {
-                if (flowerShape.texture.GetPixel(i + clearSize/2, j + clearSize/2).a != 0)
+            for (int j = -Mathf.FloorToInt(clearSize / 2.0f); j <= Mathf.FloorToInt(clearSize / 2.0f); j++) {
+                if (flowerShape.texture.GetPixel(i + Mathf.FloorToInt(clearSize / 2.0f), j + Mathf.FloorToInt(clearSize / 2.0f)).a != 0)
                 {
-                    //add flower to tile's active flowers
-                    world.GetWorldTiles()[x + i][x + j].AddFlower(this);
 
-                    Debug.Log("pos " + i + " " + j);
+                    //add flower to tile's active flowers
+                    world.GetWorldTiles()[x + i][y + j].AddFlower(this);
 
                     //start decontaminating tiles
                     world.GetTileController().StartCoroutine(world.GetTileController().Decontaminate(world.GetWorldTiles()[x + i][y + j], this, flowerShape.texture.GetPixel(i + clearSize / 2, j + clearSize / 2).r));
@@ -54,14 +54,14 @@ public class Flower : PlacableObject
 
     IEnumerator Contaminate()
     {
-        for (int i = -clearSize / 2; i <= clearSize / 2; i++)
+        for (int i = -Mathf.FloorToInt(clearSize / 2.0f); i <= Mathf.FloorToInt(clearSize / 2.0f); i++)
         {
-            for (int j = -clearSize / 2; j <= clearSize / 2; j++)
+            for (int j = -Mathf.FloorToInt(clearSize / 2.0f); j <= Mathf.FloorToInt(clearSize / 2.0f); j++)
             {
-                if (flowerShape.texture.GetPixel(i + clearSize / 2, j + clearSize / 2).a != 0)
+                if (flowerShape.texture.GetPixel(i + Mathf.FloorToInt(clearSize / 2.0f), j + Mathf.FloorToInt(clearSize / 2.0f)).a != 0)
                 {
                     //remove flower from tile's active flowers
-                    world.GetWorldTiles()[x + i][x + j].RemoveFlower(this);
+                    world.GetWorldTiles()[x + i][y + j].RemoveFlower(this);
 
                     //start decontaminating tiles
                     world.GetTileController().StartCoroutine(world.GetTileController().Contaminate(world.GetWorldTiles()[x + i][y + j]));
