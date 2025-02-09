@@ -45,16 +45,23 @@ public class WorldTileController : MonoBehaviour
 
     public IEnumerator Decontaminate(WorldTile tile, Flower f, float deconLevel)
     {
+        if (tile.GetContaminating())
+        {
+            tile.EndCon();
+        }
+
+        //set target contamination level
+
         //start decontaminate coroutine on the tile at the position
 
         //check if tile is already decontaminated stronger than the flower will decontaminate it
-        if (!tile.GetConverting() && tile.GetContLevel() > deconLevel)
+        if (!tile.GetDecontaminating() && tile.GetContLevel() > deconLevel)
         {
             tile.BeginDecon();
-           //set all the appropriate flags for the current tile
+            //set all the appropriate flags for the current tile
 
             //Decontaminate
-            while (tile.GetConverting() && tile.GetContLevel() > deconLevel)
+            while (tile.GetDecontaminating() && tile.GetContLevel() > deconLevel)
             {
                 tile.ChangeContLevel(-f.GetConvSpeed() * Time.deltaTime);
 
@@ -75,24 +82,24 @@ public class WorldTileController : MonoBehaviour
 
     public IEnumerator Contaminate(WorldTile tile)
     {
-        //start contaminate routine on the tile at the position
 
-        //CHECK FOR DECON LEVEL OF ACTIVE FLOWER IF THERE IS ONE. THIS WILL BE FOR IF THERE IS NO ACTIVE FLOWER. 
-        float conLevel = tile.GetContStrength();
-
-        //if too decontaminated
-        if (tile.GetContLevel() < conLevel)
+        //check if already transitioning
+        if (!tile.GetDecontaminating() || tile.GetActiveFlowers().Count == 0)
         {
+            //start contaminate routine on the tile at the position
 
-        }
+            //CHECK FOR DECON LEVEL OF MAIN FLOWER IF THERE IS ONE.------------------------
+            float conLevel = tile.GetContStrength();
 
-        if (tile.GetActiveFlowers().Count == 0)
-        {
-            //when there are no active flowers on the tile
+            //if too decontaminated
+            if (tile.GetContLevel() < conLevel)
+            {
+
+            }
 
             tile.BeginCon();
 
-            while (tile.GetConverting() && tile.GetContLevel() < conLevel)
+            while (tile.GetContaminating() && tile.GetContLevel() < conLevel)
             {
                 tile.ChangeContLevel(worldContSpeed * Time.deltaTime);
 
@@ -107,7 +114,6 @@ public class WorldTileController : MonoBehaviour
 
             tile.EndCon();
         }
-
 
         yield return null; 
     

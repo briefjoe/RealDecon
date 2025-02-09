@@ -72,7 +72,7 @@ public class WorldTile
         return hasObject;
     }
 
-    public void AddFlower(Flower f)
+    public void AddFlower(Flower f) //MAYBE RETURN A BOOLEAN IF THE MAIN FLOWER IS CHANGED, THEN SET TARGET CON LEVEL TO THE FLOWER'S CON LEVEL
     {
 
         //put flower into active flowers list
@@ -169,5 +169,15 @@ public class WorldTile
     public void EndCon()
     {
         contaminating = false;
+    }
+
+    public void SetTargetCont(float tc)
+    {
+        targetCont = tc;
+    }
+
+    public float GetTargetCont()
+    {
+        return targetCont;
     }
 }
