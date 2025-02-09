@@ -24,7 +24,7 @@ public class PlacableObject : MonoBehaviour
         world.GetWorldTiles()[x][y].PlaceObject(this);
     }
 
-    public virtual void Destroy()
+    public virtual void DestroyObject()
     {
         //called when the object is destroyed
 
@@ -32,5 +32,10 @@ public class PlacableObject : MonoBehaviour
 
         //clear world tile of object
         Destroy(gameObject);
+    }
+
+    public Vector2Int GetPos()
+    { 
+        return new Vector2Int(x, y);
     }
 }

@@ -10,16 +10,15 @@ public class WorldTile
     bool purified;
 
     float contStren; //strength of contamination for this tile. set by world
-    float contLevel; //level of contamination for this tile. set by flower
+    float contLevel; //current level of contamination for the tile.
     float targetCont = 1f; //the target level for contamination on this tile
-    bool contaminating; //if the tile is being contaminated
-    bool decontaminating; //if the tile is being decontaminted
+    bool transitioning; //if the tile is being contaminated/decontaminated
 
     bool hasObject;
     PlacableObject placedObject;
 
     List<Flower> activeFlowers;
-    Flower mainFlower;
+    //Flower mainFlower;
 
     void Start()
     {
@@ -61,7 +60,7 @@ public class WorldTile
 
     public void DestroyObject()
     {
-        placedObject.Destroy();
+        placedObject.DestroyObject();
 
         hasObject = false;
         placedObject = null;
@@ -72,28 +71,52 @@ public class WorldTile
         return hasObject;
     }
 
-    public void AddFlower(Flower f) //MAYBE RETURN A BOOLEAN IF THE MAIN FLOWER IS CHANGED, THEN SET TARGET CON LEVEL TO THE FLOWER'S CON LEVEL
+    public void AddFlower(Flower f)
     {
-
         //put flower into active flowers list
         activeFlowers.Add(f);
 
-        /*//check for main flower
-        if(mainFlower = null)
+        //check for main flower
+        /*if(mainFlower == null)
         {
             mainFlower = f;
+
+            SetTargetCont(mainFlower.GetConAtTile(GetRelativePos(f.GetPos())));
         }
         else
         {
-            //if(mainFlower.contstren < f.constren)
-            //change the tile's target contamination level
+            if(mainFlower.GetConAtTile(GetRelativePos(mainFlower.GetPos())) < f.GetConAtTile(GetRelativePos(f.GetPos())))
+            {
+                //change target tile's contamination and main flower if neeeded
+                SetTargetCont(mainFlower.GetConAtTile(GetRelativePos(f.GetPos())));
+                mainFlower = f;
+            }
         }*/
+
+        //if(f.GetConAtTile(GetRelativePos(f.GetPos())) >= targetCont)
+        //{
+            SetTargetCont(0); //and start decontaminating
+        //}
     }
 
     public void RemoveFlower(Flower f)
     {
         //reomve flwer from active flowers list
         activeFlowers.Remove(f);
+
+        //find a new max contLevel
+        if (activeFlowers.Count == 0)
+        {
+            SetTargetCont(GetContStrength());
+        }
+
+        /*foreach (Flower i in activeFlowers)
+        {
+            if (i.GetConAtTile(GetRelativePos(i.GetPos())) > targetCont)
+            {
+                SetTargetCont(i.GetConAtTile(GetRelativePos(i.GetPos())));
+            }
+        }*/
 
         /*if (mainFlower.Equals(f))
         {
@@ -112,6 +135,13 @@ public class WorldTile
                 mainFlower = null;
             }
         }*/
+    }
+
+    Vector2Int GetRelativePos(Vector2Int flowerPos)
+    {
+        Vector2Int tilePos = new Vector2Int(x,y);
+
+        return tilePos - flowerPos;
     }
 
     public List<Flower> GetActiveFlowers()
@@ -133,47 +163,61 @@ public class WorldTile
         return contStren;
     }
 
+    public bool GetTransitioning()
+    {
+        return transitioning;
+    }
+
     public void ChangeContLevel(float amt)
     {
         //1 = contaminated, 0 = decontaminated
         contLevel += amt;
     }
 
-    public bool GetContaminating()
-    {
-        return contaminating;
-    }
-
-    public bool GetDecontaminating()
-    {
-        return decontaminating;
-    }
-
     public void BeginDecon()
     {
-        decontaminating = true;
+        Debug.Log("Here");
+        transitioning = true;
         purified = true;
     }
 
     public void EndDecon()
     {
-        decontaminating = false;
+        Debug.Log("Here");
+        transitioning = false;
     }
 
     public void BeginCon()
     {
-        contaminating = true;
+        Debug.Log("Here");
+        transitioning = true;
         purified = false;
     }
     
     public void EndCon()
     {
-        contaminating = false;
+        Debug.Log("Here");
+        transitioning = false;
     }
 
     public void SetTargetCont(float tc)
     {
+        Debug.Log("Here");
+        transitioning = false;
+
         targetCont = tc;
+
+        if(targetCont < contLevel)
+        {
+            //decontaminate
+            world.GetTileController().StartCoroutine(world.GetTileController().Decontaminate(this));
+        }
+        else if(targetCont > contLevel)
+        {
+
+            //contaminate
+            world.GetTileController().StartCoroutine(world.GetTileController().Contaminate(this));
+        }
     }
 
     public float GetTargetCont()

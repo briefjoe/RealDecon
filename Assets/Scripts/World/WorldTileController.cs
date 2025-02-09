@@ -2,6 +2,9 @@ using System.Collections;
 using TMPro;
 using UnityEditor.PackageManager;
 using UnityEngine;
+using UnityEngine.Tilemaps;
+using static Unity.Burst.Intrinsics.Arm;
+using UnityEngine.WSA;
 
 public class WorldTileController : MonoBehaviour
 {
@@ -32,7 +35,7 @@ public class WorldTileController : MonoBehaviour
         //contaminate/decontaminate player
         if (t.GetPurified())
         {
-            if (!t.GetDecontaminating())
+            if (!t.GetTransitioning())
             {
                 player.ContaminatePlayer(-1 * playerDeconSpeed * Time.deltaTime);
             }
@@ -43,6 +46,65 @@ public class WorldTileController : MonoBehaviour
         }
     }
 
+    public IEnumerator Decontaminate(WorldTile tile)
+    {
+        yield return null;
+
+        tile.BeginDecon();
+
+        while (tile.GetTransitioning() && tile.GetContLevel() > tile.GetTargetCont())
+        {
+            tile.ChangeContLevel(-worldContSpeed * Time.deltaTime);
+
+            //update color based on conversion progress
+            worldManager.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), TileFlags.None);
+            worldManager.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(worldManager.GetDeconColor(), worldManager.GetConColor(), tile.GetContLevel()));
+            yield return null;
+
+            if (tile.GetContLevel() * 100 <= tile.GetTargetCont() * 100)
+            {
+                tile.EndDecon();
+
+                tile.SetContLevel(tile.GetContLevel());
+
+                worldManager.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), TileFlags.None);
+                worldManager.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(worldManager.GetDeconColor(), worldManager.GetConColor(), tile.GetContLevel()));
+
+                break;
+            }
+        }
+    }
+
+    public IEnumerator Contaminate(WorldTile tile)
+    {
+        yield return null;
+        tile.BeginCon();
+
+        while (tile.GetTransitioning() && tile.GetContLevel() < tile.GetTargetCont())
+        {
+            //Debug.Log("Contaminating");
+            tile.ChangeContLevel(worldContSpeed * Time.deltaTime);
+
+            //update color based on conversion progress
+            worldManager.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), TileFlags.None);
+            worldManager.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(worldManager.GetDeconColor(), worldManager.GetConColor(), tile.GetContLevel()));
+            yield return null;
+
+            if(tile.GetContLevel() >= tile.GetTargetCont())
+            {
+                tile.EndCon();
+
+                tile.SetContLevel(tile.GetContLevel());
+
+                worldManager.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), TileFlags.None);
+                worldManager.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(worldManager.GetDeconColor(), worldManager.GetConColor(), tile.GetContLevel()));
+
+                break;
+            }
+        }
+    }
+
+    /*
     public IEnumerator Decontaminate(WorldTile tile, Flower f, float deconLevel)
     {
         if (tile.GetContaminating())
@@ -118,4 +180,5 @@ public class WorldTileController : MonoBehaviour
         yield return null; 
     
     }
+    */
 }
