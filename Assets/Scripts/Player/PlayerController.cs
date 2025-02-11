@@ -7,7 +7,6 @@ public class PlayerController : MonoBehaviour
     [Header ("In Scene")]
     [SerializeField] Rigidbody2D rb;
     [SerializeField] SpriteRenderer playerSprite;
-    [SerializeField] WorldManager worldManager;
     
 
     [Header("Player Attributes")]
@@ -15,12 +14,10 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float curContLevel;
     [SerializeField] float maxContLevel;
     [SerializeField] Flower flower;
+    [SerializeField] Conaminable contam;
 
     float x = 0f;
     float y = 0f;
-
-    public float progValue = 0f; //percentage of contamination level
-    public Color contamColor = Color.white; //color filter to apply to player sprite
 
     // Start is called before the first frame update
     void Start()
@@ -34,6 +31,11 @@ public class PlayerController : MonoBehaviour
         x = Input.GetAxisRaw("Horizontal");
         y = Input.GetAxisRaw("Vertical");
 
+        if(contam.GetMaxCon() <= contam.GetContamLevel())
+        {
+            //player dies!!!!!!!!!!!!!!
+        }
+
     }
 
     private void FixedUpdate()
@@ -41,43 +43,28 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = new Vector2(x * speed, y * speed);
     }
 
-    public void ContaminatePlayer(float amount)
-    {
-        if (curContLevel < maxContLevel)
-        {
-            curContLevel = Mathf.Clamp(curContLevel + amount, 0, maxContLevel);
-
-            ContaminationColor();
-        }
-
-        if(curContLevel >= maxContLevel)
-        {
-            //THE PLAYER DIES
-        }
-    }
-
-    void ContaminationColor()
-    {
-        contamColor = Color.Lerp(Color.white, worldManager.GetConColor(), curContLevel / maxContLevel);
-        playerSprite.color = contamColor;
-    }
-
     public Vector2Int GetPos()
     {
         return new Vector2Int((int)transform.position.x, (int)transform.position.y);
     }
 
-    public void Interact(int posX, int posY)
+    /*public void Interact(int posX, int posY)
     {
         //when the player clicks
         //use the object that the player has currently selected (right now, just flowers)
 
-        if (!worldManager.GetWorldTiles()[posX][posY].GetHasObject())
+        /*if (!worldManager.GetWorldTiles()[posX][posY].GetHasObject())
         {
 
             PlacableObject f = Instantiate(flower);
 
             f.Place(worldManager, posX, posY);
+        }*
+
+        if (worldManager.GetWorldTiles()[posX][posY].GetHasObject())
+        {
+            //check if object is interactable
+            //call the interact function on the object
         }
     }
 
@@ -88,7 +75,6 @@ public class PlayerController : MonoBehaviour
         if (worldManager.GetWorldTiles()[posX][posY].GetHasObject())
         {
             worldManager.GetWorldTiles()[posX][posY].DestroyObject();
-
         }
-    }
+    }*/
 }

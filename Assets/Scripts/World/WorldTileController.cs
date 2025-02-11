@@ -8,43 +8,11 @@ using UnityEngine.WSA;
 
 public class WorldTileController : MonoBehaviour
 {
-    [SerializeField] WorldManager worldManager;
 
     [SerializeField] PlayerController player;
 
     //move this to somewhere else once I do different regions
     [SerializeField] float worldContSpeed = 0.1f;
-    [SerializeField] float playerDeconSpeed = 8.0f;
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
-    private void FixedUpdate()
-    {
-        WorldTile t = worldManager.GetWorldTiles()[player.GetPos().x][player.GetPos().y];
-
-        //contaminate/decontaminate player
-        if (t.GetPurified())
-        {
-            if (!t.GetTransitioning())
-            {
-                player.ContaminatePlayer(-1 * playerDeconSpeed * Time.deltaTime);
-            }
-        }
-        else
-        {
-            player.ContaminatePlayer(t.GetContStrength() * Time.deltaTime);
-        }
-    }
 
     public IEnumerator Decontaminate(WorldTile tile)
     {
@@ -57,8 +25,8 @@ public class WorldTileController : MonoBehaviour
             tile.ChangeContLevel(-worldContSpeed * Time.deltaTime);
 
             //update color based on conversion progress
-            worldManager.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), TileFlags.None);
-            worldManager.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(worldManager.GetDeconColor(), worldManager.GetConColor(), tile.GetContLevel()));
+            WorldManager.Instance.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), TileFlags.None);
+            WorldManager.Instance.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(WorldManager.Instance.GetDeconColor(), WorldManager.Instance.GetConColor(), tile.GetContLevel()));
             yield return null;
 
             if (tile.GetContLevel() * 100 <= tile.GetTargetCont() * 100)
@@ -67,8 +35,8 @@ public class WorldTileController : MonoBehaviour
 
                 tile.SetContLevel(tile.GetContLevel());
 
-                worldManager.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), TileFlags.None);
-                worldManager.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(worldManager.GetDeconColor(), worldManager.GetConColor(), tile.GetContLevel()));
+                WorldManager.Instance.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), TileFlags.None);
+                WorldManager.Instance.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(WorldManager.Instance.GetDeconColor(), WorldManager.Instance.GetConColor(), tile.GetContLevel()));
 
                 break;
             }
@@ -86,9 +54,9 @@ public class WorldTileController : MonoBehaviour
             tile.ChangeContLevel(worldContSpeed * Time.deltaTime);
 
             //update color based on conversion progress
-            worldManager.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), TileFlags.None);
-            worldManager.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(worldManager.GetDeconColor(), worldManager.GetConColor(), tile.GetContLevel()));
-            yield return null;
+            WorldManager.Instance.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), TileFlags.None);
+            WorldManager.Instance.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(WorldManager.Instance.GetDeconColor(), WorldManager.Instance.GetConColor(), tile.GetContLevel()));
+            yield   return null;
 
             if(tile.GetContLevel() >= tile.GetTargetCont())
             {
@@ -96,8 +64,8 @@ public class WorldTileController : MonoBehaviour
 
                 tile.SetContLevel(tile.GetContLevel());
 
-                worldManager.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), TileFlags.None);
-                worldManager.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(worldManager.GetDeconColor(), worldManager.GetConColor(), tile.GetContLevel()));
+                WorldManager.Instance.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), TileFlags.None);
+                WorldManager.Instance.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(WorldManager.Instance.GetDeconColor(), WorldManager.Instance.GetConColor(), tile.GetContLevel()));
 
                 break;
             }

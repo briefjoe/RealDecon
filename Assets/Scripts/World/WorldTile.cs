@@ -76,6 +76,8 @@ public class WorldTile
         //put flower into active flowers list
         activeFlowers.Add(f);
 
+        PlaceObject(f);
+
         //check for main flower
         /*if(mainFlower == null)
         {
@@ -176,33 +178,28 @@ public class WorldTile
 
     public void BeginDecon()
     {
-        Debug.Log("Here");
         transitioning = true;
         purified = true;
     }
 
     public void EndDecon()
     {
-        Debug.Log("Here");
         transitioning = false;
     }
 
     public void BeginCon()
     {
-        Debug.Log("Here");
         transitioning = true;
         purified = false;
     }
     
     public void EndCon()
     {
-        Debug.Log("Here");
         transitioning = false;
     }
 
     public void SetTargetCont(float tc)
     {
-        Debug.Log("Here");
         transitioning = false;
 
         targetCont = tc;

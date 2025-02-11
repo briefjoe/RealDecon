@@ -4,6 +4,8 @@ using UnityEngine.Tilemaps;
 
 public class WorldManager : MonoBehaviour
 {
+    public static WorldManager Instance;
+
     [Header("Scene")]
     [SerializeField] Tilemap worldMap; //stores the ground tiles
     [SerializeField] Tilemap waterMap; //stores the water tiles
@@ -28,6 +30,8 @@ public class WorldManager : MonoBehaviour
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Awake()
     {
+        Instance = this;
+
         //set map size based on map sprite size
         width = mapImage.texture.height;
         height = mapImage.texture.width;

@@ -9,9 +9,9 @@ public class Flower : PlacableObject
 
     int clearSize;
 
-    public override void Place(WorldManager worldManager, int xPos, int yPos)
+    public override void Place( int xPos, int yPos)
     {
-        base.Place(worldManager, xPos, yPos);
+        base.Place(xPos, yPos);
 
         clearSize = flowerShape.texture.height;
 
@@ -32,10 +32,10 @@ public class Flower : PlacableObject
                 int posX = i + Mathf.FloorToInt(clearSize / 2.0f);
                 int posY = j + Mathf.FloorToInt(clearSize / 2.0f);
 
-                if (flowerShape.texture.GetPixel(posX, posY).a != 0 && flowerShape.texture.GetPixel(posX, posY).r >= world.GetWorldTiles()[x + i][y + j].GetContStrength())
+                if (flowerShape.texture.GetPixel(posX, posY).a != 0 && flowerShape.texture.GetPixel(posX, posY).r >= WorldManager.Instance.GetWorldTiles()[x + i][y + j].GetContStrength())
                 {
                     //add flower to tile's active flowers
-                    world.GetWorldTiles()[x + i][y + j].AddFlower(this); //this should be enough to trigger the decontamination to start
+                    WorldManager.Instance.GetWorldTiles()[x + i][y + j].AddFlower(this); //this should be enough to trigger the decontamination to start
                 }
             }
         }
@@ -58,16 +58,16 @@ public class Flower : PlacableObject
                 int posX = i + Mathf.FloorToInt(clearSize / 2.0f);
                 int posY = j + Mathf.FloorToInt(clearSize / 2.0f);
 
-                if (flowerShape.texture.GetPixel(posX, posY).a != 0 && flowerShape.texture.GetPixel(posX, posY).r >= world.GetWorldTiles()[x + i][y+j].GetContStrength())
+                if (flowerShape.texture.GetPixel(posX, posY).a != 0 && flowerShape.texture.GetPixel(posX, posY).r >= WorldManager.Instance.GetWorldTiles()[x + i][y+j].GetContStrength())
                 {
                     //remove flower from tile's active flowers
-                    world.GetWorldTiles()[x + i][y + j].RemoveFlower(this); //this should end up causing the contamination to start.
+                    WorldManager.Instance.GetWorldTiles()[x + i][y + j].RemoveFlower(this); //this should end up causing the contamination to start.
                 }
             }
         }
         yield return null;
 
-        Destroy(gameObject);
+        base.DestroyObject();
     }
 
     public Sprite GetFlowerShape()

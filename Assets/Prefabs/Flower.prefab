@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 1902887383019516231}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.0214942, y: 2.4487162, z: 0}
+  m_LocalPosition: {x: 6.5, y: 10.5, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -100,5 +100,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f64bea7cf21d6b49a5a851b00a65d79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  worldItem: {fileID: 5352252977791522731, guid: 90ca084d23ade9d41909f92286c48ad4, type: 3}
   flowerShape: {fileID: 4264265909841159994, guid: 43a3ba07c52b36244a583794633a0fac, type: 3}
   convSpeed: 0.1
