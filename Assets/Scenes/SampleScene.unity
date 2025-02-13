@@ -800,7 +800,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.5176471, g: 0.5176471, b: 0.5176471, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -3203,7 +3203,6 @@ MonoBehaviour:
   conSpeed: 1
   spriteRenderers:
   - {fileID: 796643090}
-  contamColor: {r: 1, g: 1, b: 1, a: 1}
 --- !u!224 &737929911 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 8969336339773181420, guid: f7ceb09fb74cc9c4b9da8787df47b905, type: 3}
