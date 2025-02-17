@@ -6,6 +6,7 @@ public class Conaminable : MonoBehaviour
     [SerializeField] bool startContaminated;
     [SerializeField] float conSpeed = 1f;
     [SerializeField] SpriteRenderer[] spriteRenderers;
+    [SerializeField] bool worldContam = true;
 
     float curCont = 0;
     Color contamColor = Color.white;
@@ -20,19 +21,22 @@ public class Conaminable : MonoBehaviour
 
     private void FixedUpdate()
     {
-        WorldTile t = WorldManager.Instance.GetWorldTiles()[GetPos().x][GetPos().y];
+        if (worldContam)
+        {
+            WorldTile t = WorldManager.Instance.GetWorldTiles()[GetPos().x][GetPos().y];
 
-        //contaminate/decontaminate player
-        if (t.GetPurified())
-        {
-            if (!t.GetTransitioning())
+            //contaminate/decontaminate player
+            if (t.GetPurified())
             {
-                Contaminate(-1 * conSpeed * Time.deltaTime);
+                if (!t.GetTransitioning())
+                {
+                    Contaminate(-1 * conSpeed * Time.deltaTime);
+                }
             }
-        }
-        else
-        {
-            Contaminate(t.GetContStrength() * Time.deltaTime);
+            else
+            {
+                Contaminate(t.GetContStrength() * Time.deltaTime);
+            }
         }
     }
 
@@ -65,7 +69,7 @@ public class Conaminable : MonoBehaviour
         return maxContamination;
     }
 
-    Vector2Int GetPos()
+    public Vector2Int GetPos()
     {
         return new Vector2Int((int)transform.position.x, (int)transform.position.y);
     }

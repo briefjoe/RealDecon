@@ -1,10 +1,9 @@
-using JetBrains.Annotations;
-using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 
 public class PlacableObject : MonoBehaviour
 {
     [SerializeField] WorldItem worldItem;
+    [SerializeField] Vector2Int baseSize;
 
     protected int x;
     protected int y;
@@ -23,12 +22,33 @@ public class PlacableObject : MonoBehaviour
         WorldManager.Instance.GetWorldTiles()[x][y].PlaceObject(this);
     }
 
+    public virtual bool CheckCanPlace()
+    {
+        for (int i = 0; i < baseSize.x; i++)
+        {
+            for (int j = 0; j < baseSize.y; j++)
+            {
+
+                //if tile is occupied, return false
+                if (WorldManager.Instance.GetWorldTiles()[i][j].GetHasObject())
+                {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+    }
+
     public virtual void DestroyObject()
     {
         //called when the object is destroyed
 
         //spawn item in world
-        Instantiate(worldItem, transform.position, Quaternion.identity);
+        if (worldItem != null)
+        {
+            Instantiate(worldItem, transform.position, Quaternion.identity);
+        }
 
         //clear world tile of object
         Destroy(gameObject);

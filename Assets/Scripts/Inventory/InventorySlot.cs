@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -8,9 +9,22 @@ public class InventorySlot : MonoBehaviour, IDropHandler
     [SerializeField] Color selectedColor;
     [SerializeField] Color baseColor;
 
-    void Start()
+    int xPos;
+    int yPos;
+    bool hotBar;
+
+    bool contaminated = false;
+
+    void Awake()
     {
         Deselect();
+    }
+
+    public void InitSlot (int x, int y, bool inHotBar)
+    {
+        xPos = x;
+        yPos = y;
+        hotBar = inHotBar;
     }
 
     public void OnDrop(PointerEventData eventData)
@@ -30,5 +44,22 @@ public class InventorySlot : MonoBehaviour, IDropHandler
     public void Deselect()
     {
         image.color = baseColor;
+    }
+
+    public void UpdateItem(bool contam)
+    {
+        //for when item is added, check if it's contaminated.
+
+        if (contam)
+        {
+
+        }
+
+        //to get the slot's item, just get the 0th child
+    }
+
+    IEnumerator ContaminateInventory()
+    {
+        yield return null;
     }
 }

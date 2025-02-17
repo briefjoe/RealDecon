@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5091218041467000640}
   - component: {fileID: 9118658338708358131}
   - component: {fileID: 6901179870816758518}
+  - component: {fileID: 3072904802405042233}
   m_Layer: 5
   m_Name: InventorySlot
   m_TagString: Untagged
@@ -116,3 +117,20 @@ MonoBehaviour:
   image: {fileID: 5091218041467000640}
   selectedColor: {r: 0.6084906, g: 1, b: 0.634854, a: 1}
   baseColor: {r: 1, g: 1, b: 1, a: 1}
+--- !u!114 &3072904802405042233
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1421951581745798962}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a47f8c36c6470748ab9335147a38507, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxContamination: 10
+  startContaminated: 0
+  conSpeed: 1
+  spriteRenderers: []
+  worldContam: 0

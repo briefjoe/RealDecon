@@ -14,92 +14,105 @@ public class MouseManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-
-        Vector3Int tilePos = worldMap.WorldToCell(mouseWorldPos);
-
-        TileBase hoveredTile = worldMap.GetTile(tilePos);
-            
-        hoverObject.SetActive(true);
-
-        if(lastHover != null)
+        if (!Global.inMenu && !Global.isPaused)
         {
-            lastHover.RemoveHighlight();
-            lastHover = null;
+            Vector3 mouseWorldPos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
 
-        }
+            Vector3Int tilePos = worldMap.WorldToCell(mouseWorldPos);
 
-        //check if hovering over item
-        RaycastHit2D hit = Physics2D.Raycast(mouseWorldPos, Vector2.zero, 100, worldItemMask);
-        if (hit.collider != null && hit.collider.gameObject.GetComponent<WorldItem>() != null)
-        {
-            WorldItem tmp = hit.collider.gameObject.GetComponent<WorldItem>();
+            TileBase hoveredTile = worldMap.GetTile(tilePos);
 
-            //hilight the selected item
-            tmp.AddHighlight();
-            lastHover = tmp;
+            hoverObject.SetActive(true);
 
-            hoverObject.SetActive(false);
-
-            //pick up the item if clicked
-            if (Input.GetMouseButtonDown(0))
+            if (lastHover != null)
             {
-                tmp.PickUp(); //set item to be contaminated
-                if (inventoryController.AddItem(tmp.GetItem(), tmp.GetContaminated()))
+                lastHover.RemoveHighlight();
+                lastHover = null;
+
+            }
+
+            //check if hovering over item
+            RaycastHit2D hit = Physics2D.Raycast(mouseWorldPos, Vector2.zero, 100, worldItemMask);
+            if (hit.collider != null && hit.collider.gameObject.GetComponent<WorldItem>() != null)
+            {
+                WorldItem tmp = hit.collider.gameObject.GetComponent<WorldItem>();
+
+                //hilight the selected item
+                tmp.AddHighlight();
+                lastHover = tmp;
+
+                hoverObject.SetActive(false);
+
+                //pick up the item if clicked
+                if (Input.GetMouseButtonDown(0))
                 {
-                    Destroy(tmp.gameObject);
+                    tmp.PickUp(); //set item to be contaminated
+                    if (inventoryController.AddItem(tmp.GetItem(), tmp.GetContaminated()))
+                    {
+                        Destroy(tmp.gameObject);
+                    }
                 }
             }
-        }
-        else
-        {
-            //if not hovering over item, select tile
-            if (hoveredTile != null)
+            else
             {
-                hoverObject.transform.position = new Vector2(tilePos.x + 0.5f, tilePos.y + 0.5f);
-            }
-
-            if (Input.GetMouseButtonDown(0))
-            {
-                //player uses item in hand
-                Item item = inventoryController.GetSelectedItem(false);
-
-                if (item != null)
+                //if not hovering over item, select tile
+                if (hoveredTile != null)
                 {
-                    if (item.actionType == Item.ActionType.Place)
+                    hoverObject.transform.position = new Vector2(tilePos.x + 0.5f, tilePos.y + 0.5f);
+                }
+
+                if (Input.GetMouseButtonDown(0))
+                {
+                    //player uses item in hand
+                    Item item = inventoryController.GetSelectedItem(false);
+
+                    if (item != null)
                     {
-                        //place placeable
-                        PlacableObject po = Instantiate(item.placable, tilePos, Quaternion.identity);
-                        po.Place(tilePos.x, tilePos.y);
-                        inventoryController.GetSelectedItem(true);
-                    }
-                    else if (item.actionType == Item.ActionType.Dig)
-                    {
-                        //destroy selected object in world
-                        if (WorldManager.Instance.GetWorldTiles()[tilePos.x][tilePos.y].GetHasObject())
+                        if (item.actionType == Item.ActionType.Place)
                         {
-                            WorldManager.Instance.GetWorldTiles()[tilePos.x][tilePos.y].DestroyObject();
-
+                            //place placeable
+                            PlacableObject po = Instantiate(item.placable, tilePos, Quaternion.identity);
+                            po.Place(tilePos.x, tilePos.y);
+                            inventoryController.GetSelectedItem(true);
                         }
-                    }
-                    else if (item.actionType == Item.ActionType.Stab)
-                    {
-                        //swing weapon
-                    }
-                    else if (item.actionType == Item.ActionType.Shoot)
-                    {
-                        //shoot gun
-                    }
+                        else if (item.actionType == Item.ActionType.Dig)
+                        {
+                            //destroy selected object in world
+                            if (WorldManager.Instance.GetWorldTiles()[tilePos.x][tilePos.y].GetHasObject())
+                            {
+                                WorldManager.Instance.GetWorldTiles()[tilePos.x][tilePos.y].DestroyObject();
 
-                    //player.DestroyObject(tilePos.x, tilePos.y);
+                            }
+                        }
+                        else if (item.actionType == Item.ActionType.Stab)
+                        {
+                            //swing weapon
+                        }
+                        else if (item.actionType == Item.ActionType.Shoot)
+                        {
+                            //shoot gun
+                        }
+
+                        //player.DestroyObject(tilePos.x, tilePos.y);
+                    }
+                }
+
+                if (Input.GetMouseButtonDown(1))
+                {
+                    //player interacts with object in the world
+
+                    //player.Interact(tilePos.x, tilePos.y);
                 }
             }
 
-            if (Input.GetMouseButtonDown(1))
+            //flip player sprite
+            if (tilePos.x - player.GetComponent<Conaminable>().GetPos().x > 0)
             {
-                //player interacts with object in the world
-
-                //player.Interact(tilePos.x, tilePos.y);
+                player.GetPlayerSprite().transform.localScale = new Vector2(-1,1);
+            }
+            else if (tilePos.x - player.GetComponent<Conaminable>().GetPos().x < 0)
+            {
+                player.GetPlayerSprite().transform.localScale = new Vector2(1,1);
             }
         }
     }

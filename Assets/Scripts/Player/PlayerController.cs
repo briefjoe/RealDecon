@@ -28,8 +28,11 @@ public class PlayerController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        x = Input.GetAxisRaw("Horizontal");
-        y = Input.GetAxisRaw("Vertical");
+        if (!Global.inMenu && !Global.isPaused)
+        {
+            x = Input.GetAxisRaw("Horizontal");
+            y = Input.GetAxisRaw("Vertical");
+        }
 
         if(contam.GetMaxCon() <= contam.GetContamLevel())
         {
@@ -43,38 +46,8 @@ public class PlayerController : MonoBehaviour
         rb.linearVelocity = new Vector2(x * speed, y * speed);
     }
 
-    public Vector2Int GetPos()
+    public SpriteRenderer GetPlayerSprite()
     {
-        return new Vector2Int((int)transform.position.x, (int)transform.position.y);
+        return playerSprite;
     }
-
-    /*public void Interact(int posX, int posY)
-    {
-        //when the player clicks
-        //use the object that the player has currently selected (right now, just flowers)
-
-        /*if (!worldManager.GetWorldTiles()[posX][posY].GetHasObject())
-        {
-
-            PlacableObject f = Instantiate(flower);
-
-            f.Place(worldManager, posX, posY);
-        }*
-
-        if (worldManager.GetWorldTiles()[posX][posY].GetHasObject())
-        {
-            //check if object is interactable
-            //call the interact function on the object
-        }
-    }
-
-    //TMP DESTROY FUNCTION -> Things will only get destroyed if the player is holding a tool
-    public void DestroyObject(int posX, int posY)
-    {
-        //check if flower
-        if (worldManager.GetWorldTiles()[posX][posY].GetHasObject())
-        {
-            worldManager.GetWorldTiles()[posX][posY].DestroyObject();
-        }
-    }*/
 }

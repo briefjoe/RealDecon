@@ -169,3 +169,4 @@ MonoBehaviour:
   conSpeed: 1
   spriteRenderers:
   - {fileID: 7415343138009722221}
+  worldContam: 1
