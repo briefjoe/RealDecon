@@ -9,9 +9,9 @@ public class Flower : PlacableObject
 
     int clearSize;
 
-    public override void Place( int xPos, int yPos)
+    public override void Place(Vector2Int placePos)
     {
-        base.Place(xPos, yPos);
+        base.Place(placePos);
 
         clearSize = flowerShape.texture.height;
 

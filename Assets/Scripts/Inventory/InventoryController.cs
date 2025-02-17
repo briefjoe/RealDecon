@@ -90,11 +90,11 @@ public class InventoryController : MonoBehaviour
             }
             if (Input.GetAxis("Mouse ScrollWheel") > 0)
             {
-                ChangeSelectedSlot(selectedSlot + 1);
+                ChangeSelectedSlot(selectedSlot - 1);
             }
             else if (Input.GetAxis("Mouse ScrollWheel") < 0)
             {
-                ChangeSelectedSlot(selectedSlot - 1);
+                ChangeSelectedSlot(selectedSlot + 1);
             }
         }
     }
@@ -105,9 +105,6 @@ public class InventoryController : MonoBehaviour
         for (int i = 0; i < inventorySlots.Length; i++)
         {
             InventoryItem itemInSlot = inventorySlots[i].GetComponentInChildren<InventoryItem>();
-
-            if(itemInSlot != null)
-                Debug.Log(itemInSlot.GetContaminated() + " " + contaminated);
 
             if (itemInSlot != null && itemInSlot.GetItem() == item && itemInSlot.GetCount() < itemInSlot.GetItem().maxStack && itemInSlot.GetContaminated() == contaminated)
             {
@@ -172,6 +169,7 @@ public class InventoryController : MonoBehaviour
             {
                 //if this is a consumable item
                 itemInslot.ChangeCount(-1);
+                itemInslot.RefreshCount();
                 if(itemInslot.GetCount() <= 0)
                 {
                     Destroy(itemInslot.gameObject);

@@ -17,7 +17,7 @@ public class Item : ScriptableObject
     public Sprite image;
     public bool breakable;
     public float maxDurability;
-    public bool canContaminate;
+    public bool canContaminate = true; //if the item can be contaminated by things
     //maybe add a boolean for if it's rechargable when I add recharging powered tools
 
     [Header("Item Specific")]

@@ -1613,7 +1613,7 @@ MonoBehaviour:
   itemstopickup:
   - {fileID: 11400000, guid: 92a7ba666ab99e04db1127b24984c5c3, type: 2}
   - {fileID: 11400000, guid: 2e6fa3c8852db8d4ab3e57192f4f4d2c, type: 2}
-  - {fileID: 11400000, guid: 06d33458c1554044fb4c190c45f0d224, type: 2}
+  - {fileID: 11400000, guid: 5495f00183d447b49b35eea169dc7cd9, type: 2}
 --- !u!1001 &457249307
 PrefabInstance:
   m_ObjectHideFlags: 0

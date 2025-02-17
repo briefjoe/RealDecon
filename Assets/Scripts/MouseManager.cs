@@ -1,5 +1,7 @@
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.Tilemaps;
+using static UnityEditor.Progress;
 
 public class MouseManager : MonoBehaviour
 {
@@ -10,6 +12,7 @@ public class MouseManager : MonoBehaviour
     [SerializeField] LayerMask worldItemMask;
 
     WorldItem lastHover;
+    PlacableObject previewObject;
 
     // Update is called once per frame
     void Update()
@@ -55,34 +58,61 @@ public class MouseManager : MonoBehaviour
             }
             else
             {
+                Item item = inventoryController.GetSelectedItem(false);
+
+                bool canPlace = false;
+
+                if (item != null && item.placable != null)
+                {
+                    canPlace = item.placable.CheckCanPlace(new Vector2Int(tilePos.x, tilePos.y));
+
+                    if (previewObject == null)
+                    {
+                        previewObject = Instantiate(item.placable, new Vector3(tilePos.x, tilePos.y, 0), Quaternion.identity);
+                    }
+                }
+                else
+                {
+                    if (previewObject != null)
+                    {
+                        Destroy(previewObject.gameObject);
+                    }
+                }
+
                 //if not hovering over item, select tile
                 if (hoveredTile != null)
                 {
                     hoverObject.transform.position = new Vector2(tilePos.x + 0.5f, tilePos.y + 0.5f);
+
+                    if (previewObject != null)
+                    {
+                        previewObject.PreviewObject(new Vector2Int(tilePos.x, tilePos.y));
+                    }
                 }
 
                 if (Input.GetMouseButtonDown(0))
                 {
                     //player uses item in hand
-                    Item item = inventoryController.GetSelectedItem(false);
-
+                    
                     if (item != null)
                     {
                         if (item.actionType == Item.ActionType.Place)
                         {
-                            //place placeable
-                            PlacableObject po = Instantiate(item.placable, tilePos, Quaternion.identity);
-                            po.Place(tilePos.x, tilePos.y);
-                            inventoryController.GetSelectedItem(true);
+                            if (canPlace)
+                            {
+                                //place placeable
+                                PlacePlaceable(item, new Vector2Int(tilePos.x, tilePos.y));
+                            }
+                            else
+                            {
+                                //Debug.Log("Area blocked");
+                            }
                         }
                         else if (item.actionType == Item.ActionType.Dig)
                         {
                             //destroy selected object in world
-                            if (WorldManager.Instance.GetWorldTiles()[tilePos.x][tilePos.y].GetHasObject())
-                            {
-                                WorldManager.Instance.GetWorldTiles()[tilePos.x][tilePos.y].DestroyObject();
-
-                            }
+                            DestoryPlaceable(new Vector2Int(tilePos.x, tilePos.y));
+                            
                         }
                         else if (item.actionType == Item.ActionType.Stab)
                         {
@@ -114,6 +144,23 @@ public class MouseManager : MonoBehaviour
             {
                 player.GetPlayerSprite().transform.localScale = new Vector2(1,1);
             }
+        }
+    }
+
+    public void PlacePlaceable(Item item, Vector2Int tilePos)
+    {
+        //PlacableObject po = Instantiate(item.placable, new Vector3(tilePos.x, tilePos.y, 0), Quaternion.identity);
+        previewObject.Place(tilePos);
+        inventoryController.GetSelectedItem(true);
+        previewObject = null;
+    }
+
+    public void DestoryPlaceable(Vector2Int tilePos)
+    {
+        if (WorldManager.Instance.GetWorldTiles()[tilePos.x][tilePos.y].GetHasObject())
+        {
+            WorldManager.Instance.GetWorldTiles()[tilePos.x][tilePos.y].GetPlacedObject().DestroyObject();
+
         }
     }
 }

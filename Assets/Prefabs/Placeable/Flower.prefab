@@ -102,5 +102,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   worldItem: {fileID: 5352252977791522731, guid: 90ca084d23ade9d41909f92286c48ad4, type: 3}
   baseSize: {x: 1, y: 1}
+  sprite: {fileID: 191929541415628477}
   flowerShape: {fileID: 4264265909841159994, guid: 43a3ba07c52b36244a583794633a0fac, type: 3}
   convSpeed: 0.1

@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dee6fa4d037f7bd47a2f83e8e6ccf0ff, type: 3}
+  m_Name: TestMulti
+  m_EditorClassIdentifier: 
+  type: 0
+  actionType: 0
+  stackable: 1
+  maxStack: 10
+  deconInventory: 0
+  image: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+  breakable: 0
+  maxDurability: 0
+  canContaminate: 1
+  placable: {fileID: 6983798745738097465, guid: 447398a143df53f4484eb0788295b40e, type: 3}

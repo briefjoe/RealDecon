@@ -60,8 +60,6 @@ public class WorldTile
 
     public void DestroyObject()
     {
-        placedObject.DestroyObject();
-
         hasObject = false;
         placedObject = null;
     }
@@ -76,29 +74,7 @@ public class WorldTile
         //put flower into active flowers list
         activeFlowers.Add(f);
 
-        PlaceObject(f);
-
-        //check for main flower
-        /*if(mainFlower == null)
-        {
-            mainFlower = f;
-
-            SetTargetCont(mainFlower.GetConAtTile(GetRelativePos(f.GetPos())));
-        }
-        else
-        {
-            if(mainFlower.GetConAtTile(GetRelativePos(mainFlower.GetPos())) < f.GetConAtTile(GetRelativePos(f.GetPos())))
-            {
-                //change target tile's contamination and main flower if neeeded
-                SetTargetCont(mainFlower.GetConAtTile(GetRelativePos(f.GetPos())));
-                mainFlower = f;
-            }
-        }*/
-
-        //if(f.GetConAtTile(GetRelativePos(f.GetPos())) >= targetCont)
-        //{
-            SetTargetCont(0); //and start decontaminating
-        //}
+        SetTargetCont(0);
     }
 
     public void RemoveFlower(Flower f)
@@ -220,5 +196,10 @@ public class WorldTile
     public float GetTargetCont()
     {
         return targetCont;
+    }
+
+    public PlacableObject GetPlacedObject()
+    {
+        return placedObject;
     }
 }

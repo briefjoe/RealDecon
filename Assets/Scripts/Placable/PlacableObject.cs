@@ -4,25 +4,49 @@ public class PlacableObject : MonoBehaviour
 {
     [SerializeField] WorldItem worldItem;
     [SerializeField] Vector2Int baseSize;
+    [SerializeField] SpriteRenderer sprite;
 
     protected int x;
     protected int y;
 
-    public virtual void Place(int xPos, int yPos)
+    public void PreviewObject(Vector2Int hoverPos)
+    {
+        //move object to hover position
+        transform.position = new Vector2(hoverPos.x + 0.5f, hoverPos.y + 0.5f);
+
+        //change color depending on if object can be placed
+        if (CheckCanPlace(hoverPos))
+        {
+            sprite.color = new Color(1, 1, 1, 0.5f);
+        }
+        else
+        {
+            sprite.color = new Color(1, 0, 0, 0.5f);
+        }
+    }
+
+    public virtual void Place(Vector2Int placePos)
     {
         //called when the object is placed
 
-        //default: set world tile at coordinates to be occupied by this.
+        x = placePos.x;
+        y = placePos.y;
 
-        x = xPos;
-        y = yPos;
+        sprite.color = new Color(1, 1, 1, 1);
+
+        //set all the tiles underneath it to be ocupied
+        for (int i = 0; i < baseSize.x; i++)
+        {
+            for (int j = 0; j < baseSize.y; j++)
+            {
+                WorldManager.Instance.GetWorldTiles()[x+i][y+j].PlaceObject(this);
+            }
+        }
 
         transform.position = new Vector3(x +0.5f, y + 0.5f, 0);
-
-        WorldManager.Instance.GetWorldTiles()[x][y].PlaceObject(this);
     }
 
-    public virtual bool CheckCanPlace()
+    public virtual bool CheckCanPlace(Vector2Int placePos)
     {
         for (int i = 0; i < baseSize.x; i++)
         {
@@ -30,7 +54,7 @@ public class PlacableObject : MonoBehaviour
             {
 
                 //if tile is occupied, return false
-                if (WorldManager.Instance.GetWorldTiles()[i][j].GetHasObject())
+                if (WorldManager.Instance.GetWorldTiles()[placePos.x + i][placePos.y + j].GetHasObject())
                 {
                     return false;
                 }
@@ -43,6 +67,15 @@ public class PlacableObject : MonoBehaviour
     public virtual void DestroyObject()
     {
         //called when the object is destroyed
+
+        //clear object from all tiles it's on
+        for(int i = 0;i < baseSize.x; i++)
+        {
+            for(int j = 0; j < baseSize.y; j++)
+            {
+                WorldManager.Instance.GetWorldTiles()[x + i][y+j].DestroyObject();
+            }
+        }
 
         //spawn item in world
         if (worldItem != null)
