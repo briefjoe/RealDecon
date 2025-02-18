@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6319271238386023403}
   - component: {fileID: 191929541415628477}
   - component: {fileID: 6983798745738097465}
+  - component: {fileID: 397347355674365946}
   m_Layer: 0
   m_Name: MultiTest
   m_TagString: Untagged
@@ -104,6 +105,24 @@ MonoBehaviour:
   worldItem: {fileID: 0}
   baseSize: {x: 3, y: 2}
   sprite: {fileID: 7829641152278484331}
+--- !u!114 &397347355674365946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1902887383019516231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a47f8c36c6470748ab9335147a38507, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxContamination: 10
+  startContaminated: 0
+  conSpeed: 1
+  spriteRenderers:
+  - {fileID: 7829641152278484331}
+  worldContam: 0
 --- !u!1 &5471875804589581304
 GameObject:
   m_ObjectHideFlags: 0

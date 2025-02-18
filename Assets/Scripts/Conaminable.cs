@@ -1,21 +1,28 @@
+using System.Collections;
+using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.LightTransport;
+using UnityEngine.Tilemaps;
 
 public class Conaminable : MonoBehaviour
 {
-    [SerializeField] float maxContamination = 10f;
+    [SerializeField] float maxCont = 10f;
     [SerializeField] bool startContaminated;
     [SerializeField] float conSpeed = 1f;
     [SerializeField] SpriteRenderer[] spriteRenderers;
     [SerializeField] bool worldContam = true;
 
+    float targetCont = 0f;
     float curCont = 0;
     Color contamColor = Color.white;
+
+    bool contaminated = false;
 
     private void Start()
     {
         if (startContaminated)
         {
-            curCont = maxContamination;
+            curCont = maxCont;
         }
     }
 
@@ -40,19 +47,91 @@ public class Conaminable : MonoBehaviour
         }
     }
 
+    public void UpdateTargetCont(float amount)
+    {
+        StopAllCoroutines();
+
+        targetCont = amount;
+
+        if (targetCont < curCont)
+        {
+            //decontaminate
+            StartCoroutine(DecontaminateObject());
+        }
+        else if (targetCont > curCont)
+        {
+            //contaminate
+            StartCoroutine(ContaminateObject());
+        }
+    }
+
+    public IEnumerator ContaminateObject()
+    {
+        Debug.Log("Contaminating");
+
+        contaminated = true;
+
+        //the function to increase contamination on objects
+        while (curCont < maxCont)
+        {
+
+            Contaminate(conSpeed * Time.deltaTime);
+            Debug.Log("Con: " + curCont);
+
+            if (curCont >= maxCont)
+            {
+                curCont = maxCont;
+
+                ContaminationColor();
+
+                break;
+            }
+
+            yield return null;
+        }
+
+        yield return null;
+    }
+
+    public IEnumerator DecontaminateObject()
+    {
+        Debug.Log("decontaminating");
+
+        contaminated = false;
+
+        //the function to increase contamination on objects
+        while (curCont > targetCont)
+        {
+            Contaminate(-conSpeed * Time.deltaTime);
+            Debug.Log("Decon: " + curCont);
+
+
+            if (curCont <= targetCont)
+            {
+
+                curCont = targetCont;
+
+                ContaminationColor();
+
+                break;
+            }
+
+            yield return null;
+        }
+
+        yield return null;
+    }
+
     public void Contaminate(float amount)
     {
-        if (curCont < maxContamination)
-        {
-            curCont = Mathf.Clamp(curCont + amount, 0, maxContamination);
+        curCont = Mathf.Clamp(curCont + amount, 0, maxCont);
 
-            ContaminationColor();
-        }
+        ContaminationColor();
     }
 
     void ContaminationColor()
     {
-        contamColor = Color.Lerp(Color.white, WorldManager.Instance.GetConColor(), curCont / maxContamination);
+        contamColor = Color.Lerp(Color.white, WorldManager.Instance.GetConColor(), curCont / maxCont);
         foreach (SpriteRenderer s in spriteRenderers)
         {
             s.color = contamColor;
@@ -66,11 +145,16 @@ public class Conaminable : MonoBehaviour
 
     public float GetMaxCon()
     {
-        return maxContamination;
+        return maxCont;
     }
 
     public Vector2Int GetPos()
     {
         return new Vector2Int((int)transform.position.x, (int)transform.position.y);
+    }
+
+    public bool GetContaminated()
+    {
+        return contaminated;
     }
 }

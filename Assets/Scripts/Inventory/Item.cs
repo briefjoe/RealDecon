@@ -14,6 +14,7 @@ public class Item : ScriptableObject
     public bool deconInventory;
 
     [Header("Both")]
+    public int id;
     public Sprite image;
     public bool breakable;
     public float maxDurability;

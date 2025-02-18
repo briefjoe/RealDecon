@@ -1,3 +1,4 @@
+using JetBrains.Annotations;
 using UnityEngine;
 
 public class PlacableObject : MonoBehaviour
@@ -8,6 +9,8 @@ public class PlacableObject : MonoBehaviour
 
     protected int x;
     protected int y;
+
+    WorldTile[,] placedTiles;
 
     public void PreviewObject(Vector2Int hoverPos)
     {
@@ -34,16 +37,21 @@ public class PlacableObject : MonoBehaviour
 
         sprite.color = new Color(1, 1, 1, 1);
 
+        placedTiles = new WorldTile[baseSize.x,baseSize.y];
+
         //set all the tiles underneath it to be ocupied
         for (int i = 0; i < baseSize.x; i++)
         {
             for (int j = 0; j < baseSize.y; j++)
             {
                 WorldManager.Instance.GetWorldTiles()[x+i][y+j].PlaceObject(this);
+                placedTiles[i, j] = WorldManager.Instance.GetWorldTiles()[x + i][y + j];
             }
         }
 
         transform.position = new Vector3(x +0.5f, y + 0.5f, 0);
+
+        UpdateContamination();
     }
 
     public virtual bool CheckCanPlace(Vector2Int placePos)
@@ -90,5 +98,40 @@ public class PlacableObject : MonoBehaviour
     public Vector2Int GetPos()
     { 
         return new Vector2Int(x, y);
+    }
+
+    public void UpdateContamination()
+    {
+        Debug.Log("Update Contam");
+
+        if (GetComponent<Conaminable>() != null)
+        {
+            int deconCount = 0;
+
+            for (int i = 0; i < baseSize.x; i++)
+            {
+                for (int j = 0; j < baseSize.y; j++)
+                {
+                    if (placedTiles[i, j].GetPurified())
+                    {
+                        //if tile is decontaminated
+                        deconCount++;
+                    }
+                }
+            }
+
+            Debug.Log("DC " + deconCount);
+
+            if (deconCount > 0 && GetComponent<Conaminable>().GetContaminated())
+            {
+                //decontaminate
+                GetComponent<Conaminable>().UpdateTargetCont(0);
+            }
+            else if(deconCount == 0 && !GetComponent<Conaminable>().GetContaminated())
+            {
+                //contaminate
+                GetComponent<Conaminable>().UpdateTargetCont(10);
+            }
+        }
     }
 }

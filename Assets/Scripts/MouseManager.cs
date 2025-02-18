@@ -1,4 +1,5 @@
 using Unity.VisualScripting;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 using static UnityEditor.Progress;
@@ -64,17 +65,24 @@ public class MouseManager : MonoBehaviour
 
                 if (item != null && item.placable != null)
                 {
-                    canPlace = item.placable.CheckCanPlace(new Vector2Int(tilePos.x, tilePos.y));
+                    if (previewObject != null && PrefabUtility.GetCorrespondingObjectFromSource(previewObject) != item.placable)
+                    {
+                        Destroy(previewObject.gameObject);
+                        previewObject = null;
+                    }
 
                     if (previewObject == null)
                     {
                         previewObject = Instantiate(item.placable, new Vector3(tilePos.x, tilePos.y, 0), Quaternion.identity);
                     }
+
+                    canPlace = item.placable.CheckCanPlace(new Vector2Int(tilePos.x, tilePos.y));
                 }
                 else
                 {
                     if (previewObject != null)
                     {
+
                         Destroy(previewObject.gameObject);
                     }
                 }

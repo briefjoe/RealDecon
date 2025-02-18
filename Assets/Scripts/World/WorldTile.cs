@@ -87,32 +87,6 @@ public class WorldTile
         {
             SetTargetCont(GetContStrength());
         }
-
-        /*foreach (Flower i in activeFlowers)
-        {
-            if (i.GetConAtTile(GetRelativePos(i.GetPos())) > targetCont)
-            {
-                SetTargetCont(i.GetConAtTile(GetRelativePos(i.GetPos())));
-            }
-        }*/
-
-        /*if (mainFlower.Equals(f))
-        {
-            if (activeFlowers.Count > 0)
-            {
-                mainFlower = activeFlowers[0];
-
-
-                foreach (Flower tmp in activeFlowers)
-                {
-
-                }
-            }
-            else
-            {
-                mainFlower = null;
-            }
-        }*/
     }
 
     Vector2Int GetRelativePos(Vector2Int flowerPos)
@@ -156,6 +130,12 @@ public class WorldTile
     {
         transitioning = true;
         purified = true;
+
+        //update place object's contamination
+        if (placedObject != null)
+        {
+            placedObject.UpdateContamination();
+        }
     }
 
     public void EndDecon()
@@ -167,6 +147,12 @@ public class WorldTile
     {
         transitioning = true;
         purified = false;
+
+        //update placed object's contamination
+        if (placedObject != null)
+        {
+            placedObject.UpdateContamination();
+        }
     }
     
     public void EndCon()
