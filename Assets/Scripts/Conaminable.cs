@@ -8,7 +8,7 @@ public class Conaminable : MonoBehaviour
 {
     [SerializeField] float maxCont = 10f;
     [SerializeField] bool startContaminated;
-    [SerializeField] float conSpeed = 1f;
+    [SerializeField] float conSpeed = 0.1f;
     [SerializeField] SpriteRenderer[] spriteRenderers;
     [SerializeField] bool worldContam = true;
 
@@ -32,10 +32,12 @@ public class Conaminable : MonoBehaviour
         {
             WorldTile t = WorldManager.Instance.GetWorldTiles()[GetPos().x][GetPos().y];
 
+            conSpeed = t.GetContStrength();
+
             //contaminate/decontaminate player
             if (t.GetPurified())
             {
-                if (!t.GetTransitioning())
+                if (!t.GetTransitioning() && curCont > 0)
                 {
                     Contaminate(-1 * conSpeed * Time.deltaTime);
                 }
@@ -53,7 +55,7 @@ public class Conaminable : MonoBehaviour
 
         targetCont = amount;
 
-        if (targetCont < curCont)
+        if (targetCont < curCont) 
         {
             //decontaminate
             StartCoroutine(DecontaminateObject());
@@ -63,6 +65,11 @@ public class Conaminable : MonoBehaviour
             //contaminate
             StartCoroutine(ContaminateObject());
         }
+    }
+
+    public void SetContSpeed(float speed)
+    {
+        conSpeed = speed;
     }
 
     public IEnumerator ContaminateObject()

@@ -104,6 +104,8 @@ public class PlacableObject : MonoBehaviour
     {
         Debug.Log("Update Contam");
 
+        float maxCont = 0f;
+
         if (GetComponent<Conaminable>() != null)
         {
             int deconCount = 0;
@@ -117,10 +119,15 @@ public class PlacableObject : MonoBehaviour
                         //if tile is decontaminated
                         deconCount++;
                     }
+                    else
+                    {
+                        if(maxCont < placedTiles[i, j].GetContStrength())
+                        {
+                            maxCont = placedTiles[i, j].GetContStrength();
+                        }
+                    }
                 }
             }
-
-            Debug.Log("DC " + deconCount);
 
             if (deconCount > 0 && GetComponent<Conaminable>().GetContaminated())
             {
@@ -130,6 +137,7 @@ public class PlacableObject : MonoBehaviour
             else if(deconCount == 0 && !GetComponent<Conaminable>().GetContaminated())
             {
                 //contaminate
+                GetComponent<Conaminable>().SetContSpeed(maxCont);
                 GetComponent<Conaminable>().UpdateTargetCont(10);
             }
         }
