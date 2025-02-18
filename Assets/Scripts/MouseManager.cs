@@ -11,8 +11,9 @@ public class MouseManager : MonoBehaviour
     [SerializeField] GameObject hoverObject;
     [SerializeField] InventoryController inventoryController;
     [SerializeField] LayerMask worldItemMask;
+    [SerializeField] LayerMask placedObjectMask;
 
-    WorldItem lastHover;
+    HighlightObject lastHover;
     PlacableObject previewObject;
 
     // Update is called once per frame
@@ -37,13 +38,16 @@ public class MouseManager : MonoBehaviour
 
             //check if hovering over item
             RaycastHit2D hit = Physics2D.Raycast(mouseWorldPos, Vector2.zero, 100, worldItemMask);
+            //check if hovering over a placed object
+            RaycastHit2D hit2 = Physics2D.Raycast(mouseWorldPos, Vector2.zero, 100, placedObjectMask);
+
             if (hit.collider != null && hit.collider.gameObject.GetComponent<WorldItem>() != null)
             {
                 WorldItem tmp = hit.collider.gameObject.GetComponent<WorldItem>();
 
                 //hilight the selected item
-                tmp.AddHighlight();
-                lastHover = tmp;
+                tmp.GetComponent<HighlightObject>().AddHighlight();
+                lastHover = tmp.GetComponent<HighlightObject>();
 
                 hoverObject.SetActive(false);
 
@@ -55,6 +59,20 @@ public class MouseManager : MonoBehaviour
                     {
                         Destroy(tmp.gameObject);
                     }
+                }
+            }
+            else if (hit2.collider != null && hit2.collider.gameObject.GetComponent<PlacableObject>() != null && hit2.collider.gameObject.GetComponent<PlacableObject>().GetSelectable())
+            {
+                PlacableObject tmp = hit2.collider.gameObject.GetComponent<PlacableObject>();
+
+                tmp.GetComponent<HighlightObject>().AddHighlight();
+                lastHover = tmp.GetComponent<HighlightObject>();
+
+                hoverObject.SetActive(false);
+
+                if (Input.GetMouseButtonDown(1))
+                {
+                    tmp.Interact();
                 }
             }
             else
@@ -101,7 +119,7 @@ public class MouseManager : MonoBehaviour
                 if (Input.GetMouseButtonDown(0))
                 {
                     //player uses item in hand
-                    
+
                     if (item != null)
                     {
                         if (item.actionType == Item.ActionType.Place)
@@ -120,7 +138,7 @@ public class MouseManager : MonoBehaviour
                         {
                             //destroy selected object in world
                             DestoryPlaceable(new Vector2Int(tilePos.x, tilePos.y));
-                            
+
                         }
                         else if (item.actionType == Item.ActionType.Stab)
                         {
@@ -130,16 +148,12 @@ public class MouseManager : MonoBehaviour
                         {
                             //shoot gun
                         }
-
-                        //player.DestroyObject(tilePos.x, tilePos.y);
                     }
                 }
 
                 if (Input.GetMouseButtonDown(1))
                 {
                     //player interacts with object in the world
-
-                    //player.Interact(tilePos.x, tilePos.y);
                 }
             }
 

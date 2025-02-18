@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5352252977791522731}
   - component: {fileID: 8303177590802699081}
   - component: {fileID: 6570826290115636239}
+  - component: {fileID: -5829988632766823099}
   m_Layer: 6
   m_Name: GroundItem
   m_TagString: Untagged
@@ -105,7 +106,6 @@ MonoBehaviour:
   item: {fileID: 11400000, guid: 2e6fa3c8852db8d4ab3e57192f4f4d2c, type: 2}
   spriteRenderer: {fileID: 7415343138009722221}
   contamable: {fileID: 6570826290115636239}
-  outlineThickness: 0.05
 --- !u!61 &8303177590802699081
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -164,9 +164,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a47f8c36c6470748ab9335147a38507, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxContamination: 2
+  maxCont: 10
   startContaminated: 0
   conSpeed: 1
   spriteRenderers:
   - {fileID: 7415343138009722221}
   worldContam: 1
+--- !u!114 &-5829988632766823099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3812112349976811468}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e6e169a6ebc7364092a58f9837b0740, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRenderer: {fileID: 7415343138009722221}
+  outlineThickness: 0.05

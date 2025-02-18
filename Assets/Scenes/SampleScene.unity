@@ -1308,6 +1308,9 @@ MonoBehaviour:
   worldItemMask:
     serializedVersion: 2
     m_Bits: 64
+  placedObjectMask:
+    serializedVersion: 2
+    m_Bits: 128
 --- !u!114 &278315913
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3450,7 +3453,7 @@ Rigidbody2D:
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 0
-  m_Constraints: 0
+  m_Constraints: 4
 --- !u!70 &718729198
 CapsuleCollider2D:
   m_ObjectHideFlags: 0
@@ -3458,7 +3461,7 @@ CapsuleCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 718729193}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}
@@ -4385,7 +4388,7 @@ TilemapCollider2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1197411924}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Density: 1
   m_Material: {fileID: 0}

@@ -1,4 +1,5 @@
 using JetBrains.Annotations;
+using System.Diagnostics.CodeAnalysis;
 using UnityEngine;
 
 public class PlacableObject : MonoBehaviour
@@ -6,6 +7,11 @@ public class PlacableObject : MonoBehaviour
     [SerializeField] WorldItem worldItem;
     [SerializeField] Vector2Int baseSize;
     [SerializeField] SpriteRenderer sprite;
+    [SerializeField] BoxCollider2D baseCollider; //the collideable area of the base
+
+    [Header("Selection")]
+    [SerializeField] BoxCollider2D interactCollider; //the trigger area for the interaction
+    [SerializeField] bool selectable; //if the player can select the object
 
     protected int x;
     protected int y;
@@ -16,6 +22,17 @@ public class PlacableObject : MonoBehaviour
     {
         //move object to hover position
         transform.position = new Vector2(hoverPos.x + 0.5f, hoverPos.y + 0.5f);
+
+        //disable colliders
+        if (baseCollider != null)
+        {
+            baseCollider.enabled = false;
+        }
+
+        if(interactCollider != null)
+        {
+            interactCollider.enabled = false; 
+        }
 
         //change color depending on if object can be placed
         if (CheckCanPlace(hoverPos))
@@ -36,6 +53,17 @@ public class PlacableObject : MonoBehaviour
         y = placePos.y;
 
         sprite.color = new Color(1, 1, 1, 1);
+
+        //reenable colliders
+        if (baseCollider != null)
+        {
+            baseCollider.enabled = true;
+        }
+
+        if (interactCollider != null)
+        {
+            interactCollider.enabled = true;
+        }
 
         placedTiles = new WorldTile[baseSize.x,baseSize.y];
 
@@ -141,5 +169,17 @@ public class PlacableObject : MonoBehaviour
                 GetComponent<Conaminable>().UpdateTargetCont(10);
             }
         }
+    }
+
+    public virtual void Interact() 
+    {
+        //what happens when the player interacts with the object
+
+        Debug.Log("Clicked");
+    }
+
+    public bool GetSelectable()
+    {
+        return selectable;
     }
 }

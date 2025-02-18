@@ -83,7 +83,6 @@ public class Conaminable : MonoBehaviour
         {
 
             Contaminate(conSpeed * Time.deltaTime);
-            Debug.Log("Con: " + curCont);
 
             if (curCont >= maxCont)
             {
@@ -110,8 +109,6 @@ public class Conaminable : MonoBehaviour
         while (curCont > targetCont)
         {
             Contaminate(-conSpeed * Time.deltaTime);
-            Debug.Log("Decon: " + curCont);
-
 
             if (curCont <= targetCont)
             {
