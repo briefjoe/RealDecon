@@ -61,6 +61,7 @@ public class MouseManager : MonoBehaviour
                     }
                 }
             }
+            //if hovering over a selectable object
             else if (hit2.collider != null && hit2.collider.gameObject.GetComponent<PlacableObject>() != null && hit2.collider.gameObject.GetComponent<PlacableObject>().GetSelectable())
             {
                 PlacableObject tmp = hit2.collider.gameObject.GetComponent<PlacableObject>();
@@ -72,11 +73,18 @@ public class MouseManager : MonoBehaviour
 
                 if (Input.GetMouseButtonDown(1))
                 {
+                    //interact with placed object
                     tmp.Interact();
+                }
+                else if (Input.GetMouseButtonDown(0))
+                {
+                    //destroy the placed object
+                    tmp.DestroyObject();
                 }
             }
             else
             {
+                //item preview
                 Item item = inventoryController.GetSelectedItem(false);
 
                 bool canPlace = false;
@@ -85,10 +93,12 @@ public class MouseManager : MonoBehaviour
                 {
                     if (previewObject != null && PrefabUtility.GetCorrespondingObjectFromSource(previewObject) != item.placable)
                     {
+                        //remove item preview if player isn't holding the same item as they had before
                         Destroy(previewObject.gameObject);
                         previewObject = null;
                     }
 
+                    //create preview if there is no preview for current item
                     if (previewObject == null)
                     {
                         previewObject = Instantiate(item.placable, new Vector3(tilePos.x, tilePos.y, 0), Quaternion.identity);

@@ -104,6 +104,8 @@ public class PlacableObject : MonoBehaviour
     {
         //called when the object is destroyed
 
+        Debug.Log("Destroying");
+
         //clear object from all tiles it's on
         for(int i = 0;i < baseSize.x; i++)
         {
@@ -130,8 +132,6 @@ public class PlacableObject : MonoBehaviour
 
     public void UpdateContamination()
     {
-        Debug.Log("Update Contam");
-
         float maxCont = 0f;
 
         if (GetComponent<Conaminable>() != null)

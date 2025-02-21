@@ -23,6 +23,7 @@ public class Conaminable : MonoBehaviour
         if (startContaminated)
         {
             curCont = maxCont;
+            ContaminationColor();
         }
     }
 
@@ -74,8 +75,6 @@ public class Conaminable : MonoBehaviour
 
     public IEnumerator ContaminateObject()
     {
-        Debug.Log("Contaminating");
-
         contaminated = true;
 
         //the function to increase contamination on objects
@@ -101,8 +100,6 @@ public class Conaminable : MonoBehaviour
 
     public IEnumerator DecontaminateObject()
     {
-        Debug.Log("decontaminating");
-
         contaminated = false;
 
         //the function to increase contamination on objects

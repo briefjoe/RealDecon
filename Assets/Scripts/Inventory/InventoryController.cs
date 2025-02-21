@@ -4,6 +4,11 @@ using UnityEngine;
 
 public class InventoryController : MonoBehaviour
 {
+
+    [Header("Player")]
+    [SerializeField] Item[] starterItems;
+
+    [Header("Screen")]
     [SerializeField] GameObject inventoryScreen; 
     [SerializeField] GameObject inventoryItemPrefab; 
     [SerializeField] InventorySlot[] inventorySlots;
@@ -20,7 +25,7 @@ public class InventoryController : MonoBehaviour
     private void Start()
     {
         hotbarSlots = new InventorySlot[hotBarSize];
-        inventoryScreenSlots = new InventorySlot[inventorySlots.Length / hotBarSize,hotBarSize];
+        inventoryScreenSlots = new InventorySlot[inventorySlots.Length / hotBarSize, hotBarSize];
 
         int j = 0;
 
@@ -40,13 +45,19 @@ public class InventoryController : MonoBehaviour
                 int row = index / hotBarSize;
                 int col = index % hotBarSize;
 
-                inventoryScreenSlots[row,col] = inventorySlots[i];
+                inventoryScreenSlots[row, col] = inventorySlots[i];
 
                 inventorySlots[i].InitSlot(row, col, false);
             }
         }
 
         ChangeSelectedSlot(0);
+
+        //set starter items in inventory
+        for (int i = 0; i < starterItems.Length; i++)
+        {
+            AddItem(starterItems[i], false);
+        }
     }
 
     // Update is called once per frame
