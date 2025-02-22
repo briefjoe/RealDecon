@@ -15,6 +15,8 @@ public class InventorySlot : MonoBehaviour, IDropHandler
 
     bool contaminated = false;
 
+    InventoryItem item;
+
     void Awake()
     {
         Deselect();

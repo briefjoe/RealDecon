@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7415343138009722221}
   - component: {fileID: 5352252977791522731}
   - component: {fileID: 8303177590802699081}
-  - component: {fileID: 6570826290115636239}
+  - component: {fileID: -5099508192262789990}
   - component: {fileID: -5829988632766823099}
   m_Layer: 6
   m_Name: GroundItem
@@ -104,8 +104,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   item: {fileID: 11400000, guid: 2e6fa3c8852db8d4ab3e57192f4f4d2c, type: 2}
-  spriteRenderer: {fileID: 7415343138009722221}
-  contamable: {fileID: 6570826290115636239}
+  arcDuration: 0.5
+  arcHeight: 0.5
+  maxArcWidth: 1
+  minArcWidth: -1
+  maxTravHeight: 1
+  minTravHeight: -1
+  contaminated: 0
 --- !u!61 &8303177590802699081
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -152,7 +157,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.890625, y: 0.90625}
   m_EdgeRadius: 0
---- !u!114 &6570826290115636239
+--- !u!114 &-5099508192262789990
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -166,10 +171,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   maxCont: 10
   startContaminated: 0
-  conSpeed: 1
   spriteRenderers:
   - {fileID: 7415343138009722221}
   worldContam: 1
+  curCont: 0
+  conSpeed: 1
 --- !u!114 &-5829988632766823099
 MonoBehaviour:
   m_ObjectHideFlags: 0

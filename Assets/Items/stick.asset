@@ -10,14 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dee6fa4d037f7bd47a2f83e8e6ccf0ff, type: 3}
-  m_Name: TestDig
+  m_Name: stick
   m_EditorClassIdentifier: 
-  type: 1
-  actionType: 1
-  stackable: 0
-  maxStack: 0
-  image: {fileID: 4264265909841159994, guid: 43a3ba07c52b36244a583794633a0fac, type: 3}
+  type: 4
+  actionType: 4
+  stackable: 1
+  maxStack: 10
+  deconInventory: 0
+  id: stick
+  image: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
   breakable: 0
   maxDurability: 0
-  curDurability: 0
+  canContaminate: 1
   placable: {fileID: 0}

@@ -1,0 +1,10 @@
+[
+	{
+		"outputID": "pickaxe",
+		"outputCount": 1,
+		"ingredients": [
+			{"itemID": "stone", "amount": 2},
+			{"itemID": "stick", "amount": 3}
+		]
+	}
+]

@@ -14,7 +14,7 @@ public class Item : ScriptableObject
     public bool deconInventory;
 
     [Header("Both")]
-    public int id;
+    public string id;
     public Sprite image;
     public bool breakable;
     public float maxDurability;
@@ -29,7 +29,8 @@ public class Item : ScriptableObject
         Placable,
         Tool,
         Weapon,
-        Gun
+        Gun,
+        Material
     }
 
     public enum ActionType
@@ -37,7 +38,8 @@ public class Item : ScriptableObject
         Place,
         Dig,
         Stab,
-        Shoot
+        Shoot,
+        Material
     }
 
 }

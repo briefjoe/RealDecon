@@ -20,7 +20,9 @@ public class WorldManager : MonoBehaviour
 
     [SerializeField] Color conColor;
     [SerializeField] Color deconColor;
-    
+
+    [SerializeField] WorldItem worldItemPrefab;
+
 
     int width;
     int height;
@@ -93,5 +95,10 @@ public class WorldManager : MonoBehaviour
     public WorldTileController GetTileController()
     {
         return tileController;
+    }
+
+    public WorldItem GetWorldItemPrefab()
+    {
+        return worldItemPrefab;
     }
 }

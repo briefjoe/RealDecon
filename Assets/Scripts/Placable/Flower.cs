@@ -43,12 +43,12 @@ public class Flower : PlacableObject
         yield return null; 
     }
 
-    public override void DestroyObject()
+    public override void DestroyObject(Item item)
     {
-        StartCoroutine(Contaminate());
+        StartCoroutine(Contaminate(item));
     }
 
-    IEnumerator Contaminate()
+    IEnumerator Contaminate(Item item)
     {
         //go through the tiles in the range and start decontaminating them in the WorldTileController
         for (int i = -Mathf.FloorToInt(clearSize / 2.0f); i <= Mathf.FloorToInt(clearSize / 2.0f); i++)
@@ -67,7 +67,12 @@ public class Flower : PlacableObject
         }
         yield return null;
 
-        base.DestroyObject();
+        WorldManager.Instance.GetWorldTiles()[x][y].DestroyObject();
+        WorldItem tmp = Instantiate(WorldManager.Instance.GetWorldItemPrefab(), new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity);
+
+        tmp.Init(dropItem, false);
+
+        Destroy(gameObject);
     }
 
     public Sprite GetFlowerShape()

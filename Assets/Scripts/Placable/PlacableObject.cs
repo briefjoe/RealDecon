@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class PlacableObject : MonoBehaviour
 {
-    [SerializeField] WorldItem worldItem;
+    [Header("Placeable")]
+    [SerializeField] protected Item dropItem;
     [SerializeField] Vector2Int baseSize;
     [SerializeField] SpriteRenderer sprite;
     [SerializeField] BoxCollider2D baseCollider; //the collideable area of the base
@@ -12,6 +13,8 @@ public class PlacableObject : MonoBehaviour
     [Header("Selection")]
     [SerializeField] BoxCollider2D interactCollider; //the trigger area for the interaction
     [SerializeField] bool selectable; //if the player can select the object
+    [SerializeField] bool needTool; // if the player needs tool to break it
+    [SerializeField] protected Item.ActionType breakType = Item.ActionType.Dig;
 
     protected int x;
     protected int y;
@@ -100,29 +103,34 @@ public class PlacableObject : MonoBehaviour
         return true;
     }
 
-    public virtual void DestroyObject()
+    public virtual void DestroyObject(Item item)
     {
         //called when the object is destroyed
 
-        Debug.Log("Destroying");
-
-        //clear object from all tiles it's on
-        for(int i = 0;i < baseSize.x; i++)
+        if (!needTool || (item != null && item.actionType == breakType))
         {
-            for(int j = 0; j < baseSize.y; j++)
+            //clear object from all tiles it's on
+            for (int i = 0; i < baseSize.x; i++)
             {
-                WorldManager.Instance.GetWorldTiles()[x + i][y+j].DestroyObject();
+                for (int j = 0; j < baseSize.y; j++)
+                {
+                    WorldManager.Instance.GetWorldTiles()[x + i][y + j].DestroyObject();
+                }
             }
-        }
 
-        //spawn item in world
-        if (worldItem != null)
-        {
-            Instantiate(worldItem, transform.position, Quaternion.identity);
-        }
+            //spawn item in world
+            if (dropItem != null)
+            {
+                WorldItem tmp = Instantiate(WorldManager.Instance.GetWorldItemPrefab(), new Vector3(x + 0.5f,y + 0.5f, 0), Quaternion.identity);
 
-        //clear world tile of object
-        Destroy(gameObject);
+                Debug.Log(GetComponent<Conaminable>().GetContaminated());
+
+                tmp.Init(dropItem, GetComponent<Conaminable>().GetContaminated());
+            }
+
+            //clear world tile of object
+            Destroy(gameObject);
+        }
     }
 
     public Vector2Int GetPos()

@@ -7,6 +7,6 @@ public class TestScript: MonoBehaviour
 
     public void PickupItem(int id)
     {
-        ic.AddItem(itemstopickup[id], false);
+        ic.AddItem(itemstopickup[id], false, 1);
     }
 }

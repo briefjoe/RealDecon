@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 191929541415628477}
   - component: {fileID: 7707790984366470534}
   - component: {fileID: 5906187404024890650}
+  - component: {fileID: -4751303276218150488}
   m_Layer: 7
   m_Name: Flower
   m_TagString: Untagged
@@ -101,9 +102,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f64bea7cf21d6b49a5a851b00a65d79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  worldItem: {fileID: 5352252977791522731, guid: 90ca084d23ade9d41909f92286c48ad4, type: 3}
+  dropItem: {fileID: 11400000, guid: 2e6fa3c8852db8d4ab3e57192f4f4d2c, type: 2}
   baseSize: {x: 1, y: 1}
   sprite: {fileID: 191929541415628477}
+  baseCollider: {fileID: 0}
+  interactCollider: {fileID: 0}
+  selectable: 0
+  needTool: 0
+  breakType: 1
   flowerShape: {fileID: 4264265909841159994, guid: 43a3ba07c52b36244a583794633a0fac, type: 3}
   convSpeed: 0.1
 --- !u!61 &5906187404024890650
@@ -152,3 +158,21 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &-4751303276218150488
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1902887383019516231}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a47f8c36c6470748ab9335147a38507, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxCont: 10
+  startContaminated: 0
+  spriteRenderers: []
+  worldContam: 0
+  curCont: 0
+  conSpeed: 1

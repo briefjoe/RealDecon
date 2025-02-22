@@ -18,12 +18,6 @@ public class WorldTile
     PlacableObject placedObject;
 
     List<Flower> activeFlowers;
-    //Flower mainFlower;
-
-    void Start()
-    {
-        //activeFlowers = new List<Flower>();
-    }
 
     public WorldTile(int xPos, int yPos, WorldManager worldManager, float contaminationStrength)
     {

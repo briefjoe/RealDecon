@@ -8,20 +8,22 @@ public class Conaminable : MonoBehaviour
 {
     [SerializeField] float maxCont = 10f;
     [SerializeField] bool startContaminated;
-    [SerializeField] float conSpeed = 0.1f;
     [SerializeField] SpriteRenderer[] spriteRenderers;
     [SerializeField] bool worldContam = true;
 
     float targetCont = 0f;
-    float curCont = 0;
+    public float curCont = 0;
     Color contamColor = Color.white;
 
     bool contaminated = false;
+    public float conSpeed = 1f;
+    bool transitioning = false;
 
     private void Start()
     {
         if (startContaminated)
         {
+            contaminated = true;
             curCont = maxCont;
             ContaminationColor();
         }
@@ -81,6 +83,7 @@ public class Conaminable : MonoBehaviour
         while (curCont < maxCont)
         {
 
+            Debug.Log("Contaminating");
             Contaminate(conSpeed * Time.deltaTime);
 
             if (curCont >= maxCont)
@@ -95,12 +98,11 @@ public class Conaminable : MonoBehaviour
             yield return null;
         }
 
-        yield return null;
+        Debug.Log("Done contaminating");
     }
 
     public IEnumerator DecontaminateObject()
     {
-        contaminated = false;
 
         //the function to increase contamination on objects
         while (curCont > targetCont)
@@ -120,7 +122,7 @@ public class Conaminable : MonoBehaviour
             yield return null;
         }
 
-        yield return null;
+        contaminated = false;
     }
 
     public void Contaminate(float amount)
@@ -133,6 +135,7 @@ public class Conaminable : MonoBehaviour
     void ContaminationColor()
     {
         contamColor = Color.Lerp(Color.white, WorldManager.Instance.GetConColor(), curCont / maxCont);
+
         foreach (SpriteRenderer s in spriteRenderers)
         {
             s.color = contamColor;
@@ -151,7 +154,7 @@ public class Conaminable : MonoBehaviour
 
     public Vector2Int GetPos()
     {
-        return new Vector2Int((int)transform.position.x, (int)transform.position.y);
+        return new Vector2Int(Mathf.FloorToInt(transform.position.x), Mathf.FloorToInt(transform.position.y));
     }
 
     public bool GetContaminated()

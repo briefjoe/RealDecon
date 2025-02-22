@@ -10,6 +10,7 @@ public class MouseManager : MonoBehaviour
     [SerializeField] Tilemap worldMap;
     [SerializeField] GameObject hoverObject;
     [SerializeField] InventoryController inventoryController;
+    [SerializeField] Item stoneItem;
     [SerializeField] LayerMask worldItemMask;
     [SerializeField] LayerMask placedObjectMask;
 
@@ -55,7 +56,7 @@ public class MouseManager : MonoBehaviour
                 if (Input.GetMouseButtonDown(0))
                 {
                     tmp.PickUp(); //set item to be contaminated
-                    if (inventoryController.AddItem(tmp.GetItem(), tmp.GetContaminated()))
+                    if (inventoryController.AddItem(tmp.GetItem(), tmp.GetContaminated(), 1) == 0)
                     {
                         Destroy(tmp.gameObject);
                     }
@@ -71,6 +72,8 @@ public class MouseManager : MonoBehaviour
 
                 hoverObject.SetActive(false);
 
+                Item item = inventoryController.GetSelectedItem(false);
+
                 if (Input.GetMouseButtonDown(1))
                 {
                     //interact with placed object
@@ -79,7 +82,7 @@ public class MouseManager : MonoBehaviour
                 else if (Input.GetMouseButtonDown(0))
                 {
                     //destroy the placed object
-                    tmp.DestroyObject();
+                    tmp.DestroyObject(item);
                 }
             }
             else
@@ -146,8 +149,17 @@ public class MouseManager : MonoBehaviour
                         }
                         else if (item.actionType == Item.ActionType.Dig)
                         {
-                            //destroy selected object in world
-                            DestoryPlaceable(new Vector2Int(tilePos.x, tilePos.y));
+                            if (WorldManager.Instance.GetWorldTiles()[tilePos.x][tilePos.y].GetHasObject())
+                            {
+                                //destroy selected object in world
+                                DestoryPlaceable(new Vector2Int(tilePos.x, tilePos.y), item);
+                            }
+                            else
+                            {
+                                //dig up stone
+                                WorldItem tmp = Instantiate(WorldManager.Instance.GetWorldItemPrefab(), new Vector3(tilePos.x + 0.5f, tilePos.y + 0.5f, 0), Quaternion.identity);
+                                tmp.Init(stoneItem, !WorldManager.Instance.GetWorldTiles()[tilePos.x][tilePos.y].GetPurified());
+                            }
 
                         }
                         else if (item.actionType == Item.ActionType.Stab)
@@ -187,11 +199,11 @@ public class MouseManager : MonoBehaviour
         previewObject = null;
     }
 
-    public void DestoryPlaceable(Vector2Int tilePos)
+    public void DestoryPlaceable(Vector2Int tilePos, Item item)
     {
         if (WorldManager.Instance.GetWorldTiles()[tilePos.x][tilePos.y].GetHasObject())
         {
-            WorldManager.Instance.GetWorldTiles()[tilePos.x][tilePos.y].GetPlacedObject().DestroyObject();
+            WorldManager.Instance.GetWorldTiles()[tilePos.x][tilePos.y].GetPlacedObject().DestroyObject(item);
 
         }
     }

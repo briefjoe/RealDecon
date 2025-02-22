@@ -10,15 +10,16 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: dee6fa4d037f7bd47a2f83e8e6ccf0ff, type: 3}
-  m_Name: TestPlace
+  m_Name: stone
   m_EditorClassIdentifier: 
-  type: 0
-  actionType: 0
+  type: 4
+  actionType: 4
   stackable: 1
   maxStack: 10
   deconInventory: 0
-  image: {fileID: 3373568495408583166, guid: 2d57e3f2b541499429ec84bbe4ad1784, type: 3}
+  id: stone
+  image: {fileID: -3262907917433762153, guid: df2acdb3ed42f2d4ebf34733ec2bb6e3, type: 3}
   breakable: 0
   maxDurability: 0
   canContaminate: 1
-  placable: {fileID: 7707790984366470534, guid: d885aab3d807e544697acb57271ccec4, type: 3}
+  placable: {fileID: 0}
