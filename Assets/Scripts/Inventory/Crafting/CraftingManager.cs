@@ -7,12 +7,13 @@ public class CraftingManager : MonoBehaviour
     public static CraftingManager Instance;
 
     [SerializeField] InventoryController inventoryController;
+    [SerializeField] List<Item> unlockedRecipes;
 
     List<CraftingRecipe> recipes;
 
     private void Awake()
     {
-        if(Instance == null)
+        if (Instance == null)
         {
             Instance = this;
         }
@@ -44,7 +45,7 @@ public class CraftingManager : MonoBehaviour
 
     bool CanCraft(CraftingRecipe recipe)
     {
-        foreach(Ingredient ingredient in recipe.ingredients)
+        foreach (Ingredient ingredient in recipe.ingredients)
         {
             Debug.Log("Checking for " + ingredient.itemID + " " + ingredient.amount);
 
@@ -61,7 +62,7 @@ public class CraftingManager : MonoBehaviour
     public void Craft(string id)
     {
         CraftingRecipe recipe = GetRecipe(id);
-        if(recipe == null)
+        if (recipe == null)
         {
             Debug.Log("Recipe not found");
             return;
@@ -69,7 +70,7 @@ public class CraftingManager : MonoBehaviour
 
         if (CanCraft(recipe))
         {
-            foreach(Ingredient ingeredient in recipe.ingredients)
+            foreach (Ingredient ingeredient in recipe.ingredients)
             {
                 //remove crafting item from player's inventory
                 inventoryController.RemoveItems(ItemManager.Instance.GetItemList().Find(i => i.id == ingeredient.itemID), false, ingeredient.amount);
@@ -85,5 +86,10 @@ public class CraftingManager : MonoBehaviour
     public List<CraftingRecipe> GetRecipeList()
     {
         return recipes;
+    }
+
+    public List<Item> GetUnlockedRecipes()
+    {
+        return unlockedRecipes;
     }
 }

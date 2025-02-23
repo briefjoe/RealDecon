@@ -18,7 +18,7 @@ MonoBehaviour:
   maxStack: 10
   deconInventory: 0
   id: stone
-  image: {fileID: -3262907917433762153, guid: df2acdb3ed42f2d4ebf34733ec2bb6e3, type: 3}
+  image: {fileID: 8399011212269539787, guid: 22102a76449019548921a0c089a33ad1, type: 3}
   breakable: 0
   maxDurability: 0
   canContaminate: 1

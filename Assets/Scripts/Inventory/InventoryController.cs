@@ -292,7 +292,7 @@ public class InventoryController : MonoBehaviour
     {
         foreach(var entry in inventoryItemCounts)
         {
-            Debug.Log("check: " + itemID + " amount: " + amount + " key: " + entry.Key.id +  " value: " + entry.Value);
+            //Debug.Log("check: " + itemID + " amount: " + amount + " key: " + entry.Key.id +  " value: " + entry.Value);
             if(entry.Key.id == itemID && entry.Value >= amount)
             {
                 return true;

@@ -18,7 +18,7 @@ MonoBehaviour:
   maxStack: 10
   deconInventory: 0
   id: stick
-  image: {fileID: 10901, guid: 0000000000000000f000000000000000, type: 0}
+  image: {fileID: -306787472437928336, guid: c714114fbe6ce414abb410084a36ddd8, type: 3}
   breakable: 0
   maxDurability: 0
   canContaminate: 1

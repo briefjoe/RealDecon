@@ -18,7 +18,7 @@ MonoBehaviour:
   maxStack: 1
   deconInventory: 0
   id: pickaxe
-  image: {fileID: 4264265909841159994, guid: 43a3ba07c52b36244a583794633a0fac, type: 3}
+  image: {fileID: 8959118705387878318, guid: 61145212c39b9a148a197a3a56b46ac0, type: 3}
   breakable: 0
   maxDurability: 0
   canContaminate: 1

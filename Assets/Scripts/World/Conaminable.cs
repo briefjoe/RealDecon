@@ -82,8 +82,6 @@ public class Conaminable : MonoBehaviour
         //the function to increase contamination on objects
         while (curCont < maxCont)
         {
-
-            Debug.Log("Contaminating");
             Contaminate(conSpeed * Time.deltaTime);
 
             if (curCont >= maxCont)
@@ -97,8 +95,6 @@ public class Conaminable : MonoBehaviour
 
             yield return null;
         }
-
-        Debug.Log("Done contaminating");
     }
 
     public IEnumerator DecontaminateObject()

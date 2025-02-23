@@ -18,7 +18,7 @@ MonoBehaviour:
   maxStack: 10
   deconInventory: 0
   id: synth
-  image: {fileID: 10915, guid: 0000000000000000f000000000000000, type: 0}
+  image: {fileID: 2971599795252398241, guid: 61585dddfad967a488c939847a1eefa7, type: 3}
   breakable: 0
   maxDurability: 0
   canContaminate: 1
