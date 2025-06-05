@@ -56,7 +56,7 @@ public class Conaminable : MonoBehaviour
     {
         StopAllCoroutines();
 
-        targetCont = amount;
+        targetCont = Mathf.Clamp(amount, 0, maxCont);
 
         if (targetCont < curCont) 
         {
@@ -107,7 +107,6 @@ public class Conaminable : MonoBehaviour
 
             if (curCont <= targetCont)
             {
-
                 curCont = targetCont;
 
                 ContaminationColor();

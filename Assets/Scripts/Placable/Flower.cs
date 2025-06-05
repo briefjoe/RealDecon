@@ -15,7 +15,7 @@ public class Flower : PlacableObject
 
         clearSize = flowerShape.texture.height;
 
-        StartCoroutine(Decontaminate());
+        StartCoroutine(Transition(true));
     }
 
     public float GetConvSpeed()
@@ -23,56 +23,57 @@ public class Flower : PlacableObject
         return convSpeed;
     }
 
-    IEnumerator Decontaminate()
-    {
-        //go through the tiles in the range and start edecontaminating them in the WorldTileController
-        for(int i = -Mathf.FloorToInt(clearSize / 2.0f); i <= Mathf.FloorToInt(clearSize / 2.0f); i++)
-        {
-            for (int j = -Mathf.FloorToInt(clearSize / 2.0f); j <= Mathf.FloorToInt(clearSize / 2.0f); j++) {
-                int posX = i + Mathf.FloorToInt(clearSize / 2.0f);
-                int posY = j + Mathf.FloorToInt(clearSize / 2.0f);
-
-                if (flowerShape.texture.GetPixel(posX, posY).a != 0 && flowerShape.texture.GetPixel(posX, posY).r >= WorldManager.Instance.GetWorldTiles()[x + i][y + j].GetContStrength())
-                {
-                    //add flower to tile's active flowers
-                    WorldManager.Instance.GetWorldTiles()[x + i][y + j].AddFlower(this); //this should be enough to trigger the decontamination to start
-                }
-            }
-        }
-
-        yield return null; 
-    }
-
     public override void DestroyObject(Item item)
     {
-        StartCoroutine(Contaminate(item));
+        StartCoroutine(Transition(false, item));
     }
 
-    IEnumerator Contaminate(Item item)
+    IEnumerator Transition(bool decontaminating, Item item = null)
     {
-        //go through the tiles in the range and start decontaminating them in the WorldTileController
-        for (int i = -Mathf.FloorToInt(clearSize / 2.0f); i <= Mathf.FloorToInt(clearSize / 2.0f); i++)
-        {
-            for (int j = -Mathf.FloorToInt(clearSize / 2.0f); j <= Mathf.FloorToInt(clearSize / 2.0f); j++)
-            {
-                int posX = i + Mathf.FloorToInt(clearSize / 2.0f);
-                int posY = j + Mathf.FloorToInt(clearSize / 2.0f);
 
-                if (flowerShape.texture.GetPixel(posX, posY).a != 0 && flowerShape.texture.GetPixel(posX, posY).r >= WorldManager.Instance.GetWorldTiles()[x + i][y+j].GetContStrength())
+        int halfSize = Mathf.FloorToInt(clearSize/2);
+        WorldTile[][] tiles = WorldManager.Instance.GetWorldTiles();
+
+        for (int i = -halfSize; i <= halfSize; i++)
+        {
+            for (int j = -halfSize; j <= halfSize; j++)
+            {
+                int posX = i + halfSize;
+                int posY = j + halfSize;
+
+                if (IsPixelActive(posX, posY) && PixelStrongerThanTile(posX, posY, tiles[x + i][y + j]))
                 {
-                    //remove flower from tile's active flowers
-                    WorldManager.Instance.GetWorldTiles()[x + i][y + j].RemoveFlower(this); //this should end up causing the contamination to start.
+                    if (decontaminating)
+                    {
+                        //add flower to the tile's active flowers
+                        tiles[x + i][y + j].AddFlower(this);
+                    }
+                    else
+                    {
+                        //remove flower from tile's active flowers
+                        tiles[x + i][y + j].RemoveFlower(this); //this should end up causing the contamination to start.
+                    }
                 }
             }
         }
-        yield return null;
 
-        WorldManager.Instance.GetWorldTiles()[x][y].DestroyObject();
-        WorldItem tmp = Instantiate(WorldManager.Instance.GetWorldItemPrefab(), new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity);
 
-        tmp.Init(dropItem, false);
 
-        Destroy(gameObject);
+        if (!decontaminating && dropItem != null)
+        {
+            yield return null;
+
+            WorldManager.Instance.GetWorldTiles()[x][y].DestroyObject();
+            WorldItem tmp = Instantiate(WorldManager.Instance.GetWorldItemPrefab(), new Vector3(x + 0.5f, y + 0.5f, 0), Quaternion.identity);
+
+            tmp.Init(dropItem, false);
+
+            Destroy(gameObject);
+        }
+        else
+        {
+            yield return null;
+        }
     }
 
     public Sprite GetFlowerShape()
@@ -83,5 +84,15 @@ public class Flower : PlacableObject
     public float GetConAtTile(Vector2Int pos)
     {
         return flowerShape.texture.GetPixel(pos.x, pos.y).r;
+    }
+
+    bool IsPixelActive(int x, int y)
+    {
+        return flowerShape.texture.GetPixel(x, y).a != 0;
+    }
+
+    bool PixelStrongerThanTile(int x, int y, WorldTile tile)
+    {
+        return flowerShape.texture.GetPixel(x, y).r >= tile.GetContStrength();
     }
 }

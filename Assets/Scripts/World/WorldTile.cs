@@ -76,6 +76,8 @@ public class WorldTile
         //reomve flwer from active flowers list
         activeFlowers.Remove(f);
 
+        Debug.Log(activeFlowers.Count);
+
         //find a new max contLevel
         if (activeFlowers.Count == 0)
         {
@@ -126,10 +128,7 @@ public class WorldTile
         purified = true;
 
         //update place object's contamination
-        if (placedObject != null)
-        {
-            placedObject.UpdateContamination();
-        }
+        placedObject?.UpdateContamination();
     }
 
     public void EndDecon()
@@ -143,10 +142,7 @@ public class WorldTile
         purified = false;
 
         //update placed object's contamination
-        if (placedObject != null)
-        {
-            placedObject.UpdateContamination();
-        }
+        placedObject?.UpdateContamination();
     }
     
     public void EndCon()
