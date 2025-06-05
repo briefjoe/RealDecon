@@ -1,10 +1,6 @@
 using System.Collections;
-using TMPro;
-using UnityEditor.PackageManager;
 using UnityEngine;
 using UnityEngine.Tilemaps;
-using static Unity.Burst.Intrinsics.Arm;
-using UnityEngine.WSA;
 
 public class WorldTileController : MonoBehaviour
 {
@@ -25,8 +21,7 @@ public class WorldTileController : MonoBehaviour
             tile.ChangeContLevel(-worldContSpeed * Time.deltaTime);
 
             //update color based on conversion progress
-            WorldManager.Instance.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), TileFlags.None);
-            WorldManager.Instance.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(WorldManager.Instance.GetDeconColor(), WorldManager.Instance.GetConColor(), tile.GetContLevel()));
+            UpdateTileColor(tile);
             yield return null;
 
             if (tile.GetContLevel() * 100 <= tile.GetTargetCont() * 100)
@@ -35,8 +30,7 @@ public class WorldTileController : MonoBehaviour
 
                 tile.SetContLevel(tile.GetContLevel());
 
-                WorldManager.Instance.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), TileFlags.None);
-                WorldManager.Instance.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(WorldManager.Instance.GetDeconColor(), WorldManager.Instance.GetConColor(), tile.GetContLevel()));
+                UpdateTileColor(tile);
 
                 break;
             }
@@ -54,8 +48,7 @@ public class WorldTileController : MonoBehaviour
             tile.ChangeContLevel(worldContSpeed * Time.deltaTime);
 
             //update color based on conversion progress
-            WorldManager.Instance.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), TileFlags.None);
-            WorldManager.Instance.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(WorldManager.Instance.GetDeconColor(), WorldManager.Instance.GetConColor(), tile.GetContLevel()));
+            UpdateTileColor(tile);
             yield   return null;
 
             if(tile.GetContLevel() >= tile.GetTargetCont())
@@ -64,89 +57,20 @@ public class WorldTileController : MonoBehaviour
 
                 tile.SetContLevel(tile.GetContLevel());
 
-                WorldManager.Instance.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), TileFlags.None);
-                WorldManager.Instance.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(WorldManager.Instance.GetDeconColor(), WorldManager.Instance.GetConColor(), tile.GetContLevel()));
+                UpdateTileColor(tile);
 
                 break;
             }
         }
     }
 
-    /*
-    public IEnumerator Decontaminate(WorldTile tile, Flower f, float deconLevel)
+
+    void UpdateTileColor(WorldTile tile)
     {
-        if (tile.GetContaminating())
-        {
-            tile.EndCon();
-        }
+        Vector3Int tilePos = new Vector3Int(tile.GetX(), tile.GetY(), 0);
+        Tilemap map = WorldManager.Instance.GetWorldMap();
 
-        //set target contamination level
-
-        //start decontaminate coroutine on the tile at the position
-
-        //check if tile is already decontaminated stronger than the flower will decontaminate it
-        if (!tile.GetDecontaminating() && tile.GetContLevel() > deconLevel)
-        {
-            tile.BeginDecon();
-            //set all the appropriate flags for the current tile
-
-            //Decontaminate
-            while (tile.GetDecontaminating() && tile.GetContLevel() > deconLevel)
-            {
-                tile.ChangeContLevel(-f.GetConvSpeed() * Time.deltaTime);
-
-                //update color based on conversion progress
-                worldManager.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), UnityEngine.Tilemaps.TileFlags.None);
-                worldManager.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(worldManager.GetDeconColor(), worldManager.GetConColor(), tile.GetContLevel()));
-
-                yield return null;
-            }
-
-            tile.SetContLevel(deconLevel);
-
-            tile.EndDecon();
-        }
-
-        yield return null;
+        map.SetTileFlags(tilePos, TileFlags.None);
+        map.SetColor(tilePos, Color.Lerp(WorldManager.Instance.GetDeconColor(), WorldManager.Instance.GetConColor(), tile.GetContLevel()));
     }
-
-    public IEnumerator Contaminate(WorldTile tile)
-    {
-
-        //check if already transitioning
-        if (!tile.GetDecontaminating() || tile.GetActiveFlowers().Count == 0)
-        {
-            //start contaminate routine on the tile at the position
-
-            //CHECK FOR DECON LEVEL OF MAIN FLOWER IF THERE IS ONE.------------------------
-            float conLevel = tile.GetContStrength();
-
-            //if too decontaminated
-            if (tile.GetContLevel() < conLevel)
-            {
-
-            }
-
-            tile.BeginCon();
-
-            while (tile.GetContaminating() && tile.GetContLevel() < conLevel)
-            {
-                tile.ChangeContLevel(worldContSpeed * Time.deltaTime);
-
-                //update color based on conversion progress
-                worldManager.GetWorldMap().SetTileFlags(new Vector3Int(tile.GetX(), tile.GetY(), 0), UnityEngine.Tilemaps.TileFlags.None);
-                worldManager.GetWorldMap().SetColor(new Vector3Int(tile.GetX(), tile.GetY(), 0), Color.Lerp(worldManager.GetDeconColor(), worldManager.GetConColor(), tile.GetContLevel()));
-
-                yield return null;
-            }
-
-            tile.SetContLevel(conLevel);
-
-            tile.EndCon();
-        }
-
-        yield return null; 
-    
-    }
-    */
 }

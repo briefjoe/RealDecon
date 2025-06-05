@@ -75,8 +75,9 @@ public class PlacableObject : MonoBehaviour
         {
             for (int j = 0; j < baseSize.y; j++)
             {
-                WorldManager.Instance.GetWorldTiles()[x+i][y+j].PlaceObject(this);
-                placedTiles[i, j] = WorldManager.Instance.GetWorldTiles()[x + i][y + j];
+                WorldTile tile = WorldManager.Instance.GetWorldTiles()[x + i][y + j];
+                tile.PlaceObject(this);
+                placedTiles[i, j] = tile;
             }
         }
 
@@ -123,8 +124,6 @@ public class PlacableObject : MonoBehaviour
             {
                 WorldItem tmp = Instantiate(WorldManager.Instance.GetWorldItemPrefab(), new Vector3(x + 0.5f,y + 0.5f, 0), Quaternion.identity);
 
-                Debug.Log(GetComponent<Conaminable>().GetContaminated());
-
                 tmp.Init(dropItem, GetComponent<Conaminable>().GetContaminated());
             }
 
@@ -140,9 +139,11 @@ public class PlacableObject : MonoBehaviour
 
     public void UpdateContamination()
     {
+
+        Conaminable contam = GetComponent<Conaminable>();
         float maxCont = 0f;
 
-        if (GetComponent<Conaminable>() != null)
+        if (contam != null)
         {
             int deconCount = 0;
 
@@ -165,16 +166,16 @@ public class PlacableObject : MonoBehaviour
                 }
             }
 
-            if (deconCount > 0 && GetComponent<Conaminable>().GetContaminated())
+            if (deconCount > 0 && contam.GetContaminated())
             {
                 //decontaminate
-                GetComponent<Conaminable>().UpdateTargetCont(0);
+                contam.UpdateTargetCont(0);
             }
-            else if(deconCount == 0 && !GetComponent<Conaminable>().GetContaminated())
+            else if(deconCount == 0 && !contam.GetContaminated())
             {
                 //contaminate
-                GetComponent<Conaminable>().SetContSpeed(maxCont);
-                GetComponent<Conaminable>().UpdateTargetCont(10);
+                contam.SetContSpeed(maxCont);
+                contam.UpdateTargetCont(10);
             }
         }
     }
